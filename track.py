@@ -23,7 +23,7 @@ def create_track():
 
 def draw_track():
     for i in range(TRACK_NUM):
-        track_x = i*TRACK_WIDTH
+        track_x = (i+1)*TRACK_WIDTH + 20
 
         pygame.draw.rect(screen, TRACK_COLOR, (track_x, 0, TRACK_WIDTH, SCREEN_HEIGHT))
 

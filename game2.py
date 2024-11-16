@@ -1,4 +1,5 @@
-import note, music, menu, track, score
+import note, music, menu, track 
+from score import Score
 import pygame
 import sys
 
@@ -12,11 +13,12 @@ screen = track.create_track()
 def start_game():
     menu.start_menu()
     global note_y, player_score
-    player_score = 0
+    player_score = Score()
     running = True
     start_time = pygame.time.get_ticks()/1000
 
     while running:
+        player_score.update_score()
         dt = clock.get_time() / 1000
 
         for event in pygame.event.get():
@@ -26,7 +28,8 @@ def start_game():
                 if event.key == pygame.K_SPACE:
                     #check if note in hit zone
                     if track.hit_zone_y - note.note_radius <= note.note_y <= track.hit_zone_y + track.hit_zone_height:
-                        score.update(1)
+                        player_score.update_score()
+                        player_score.add_score(1)
                         note.reset_note()
 
         note.update_note_position(dt)
@@ -39,7 +42,7 @@ def start_game():
         screen.fill(track.BACKGROUND_COLOR)
         track.draw_track()
         note.draw_note()
-        score.draw_score(screen)
+        # player_score.draw_score(screen)
 
         pygame.display.flip()
         clock.tick(60)

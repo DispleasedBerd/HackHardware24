@@ -23,3 +23,13 @@ def draw_note():
 def update_note_position(dt):
     global note_y
     note_y += note_speed * dt
+
+def is_in_score_zone(note):
+        if track.hit_zone_y - note.note_radius <= note.note_y <= track.hit_zone_y + track.hit_zone_height:
+            return True
+        else:
+            return False
+def calculate_score(note):
+        max_score = 100
+        distance = abs(note.note_y-track.hit_zone_y)
+        score = max_score*2.7**(-distance)
