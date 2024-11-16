@@ -7,6 +7,8 @@ pygame.init()
 #frame rate
 clock = pygame.time.Clock()
 
+screen = track.create_track()
+
 def start_game():
     global note_y, score
     running = True
@@ -15,30 +17,29 @@ def start_game():
     while running:
         dt = clock.get_time() / 1000
 
-        track.create_track()
-        note.create_note()
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     #check if note in hit zone
-                    if track.hit_zone_y - note.note_radius <= note_y <= track.hit_zone_y + track.hit_zone_height:
-                        score = score + 1
-                        note_y = -note.note_radius
+                    if track.hit_zone_y - note.note_radius <= note.note_y <= track.hit_zone_y + track.hit_zone_height:
+                        score.update(1)
+                        note.reset_note()
 
-        note_y = note_y + note.note_speed * dt
+        note.update_note_position(dt)
 
-        if note_y > track.SCREEN_HEIGHT + note.note_radius:
+        if note.note_y > track.SCREEN_HEIGHT + note.note_radius:
             print("note missed, no score added.")
-            note_y = -note.note_radius
+            note.reset_note()
 
-        #print score onto screen
-        score.update_score()
+        #update screen
+        screen.fill(track.BACKGROUND_COLOR)
+        track.draw_track()
+        note.draw_note()
+        score.draw_score(screen)
 
         pygame.display.flip()
-
         clock.tick(60)
 
     pygame.quit()

@@ -1,23 +1,23 @@
 import pygame
 import sys
 
-# Colors
+# Screen dimensions
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 750
 TRACK_COLOR = (100, 100, 100)
 HIT_ZONE_COLOR = (255, 0, 0)
 BACKGROUND_COLOR = (30, 30, 30)
-
-# Screen dimensions
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 750
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("HackHardware24 - One Column")
 
 #hit zone
 hit_zone_y = SCREEN_HEIGHT - 100
 hit_zone_height = 10
 
 def create_track():
-    screen.fill(BACKGROUND_COLOR)
+    global screen
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("HackHardware24 - One Column")
+    return screen
 
+def draw_track():
     #track
     track_width = 100
     track_x = (SCREEN_WIDTH - track_width) // 2
