@@ -46,15 +46,16 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.type == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE:
                     #check if note in hit zone
-                    if hit_zone_y <= note_y <= hit_zone_y + hit_zone_height:
-                        score += 1
+                    if hit_zone_y - note_radius <= note_y <= hit_zone_y + hit_zone_height:
+                        score = score + 1
                         note_y = -note_radius
 
         note_y = note_y + note_speed * dt
 
         if note_y > SCREEN_HEIGHT + note_radius:
+            print("note missed, no score added.")
             note_y = -note_radius
 
         screen.fill(BACKGROUND_COLOR)
