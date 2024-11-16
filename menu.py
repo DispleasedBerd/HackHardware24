@@ -1,9 +1,11 @@
-import pygame,sys
+import pygame,sys,game
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Menu")
-font = pygame.font.SysFont(None,100)
-
+font = pygame.font.SysFont(None,40)
+clock = pygame.time.Clock()
+skibidi = pygame.image.load("Assets/Skibidi.png")
+skibidi = pygame.transform.scale(skibidi,(1280,720))
  
 running = True
 while running:
@@ -12,15 +14,18 @@ while running:
     screen.blit(menuText, (screen.get_width() // 2 - menuText.get_width() // 2,
                            screen.get_height() // 2 - menuText.get_height() // 2))
 
+    screen.blit(skibidi,(0,0))
+
     click = False
 
-    playButton = pygame.Rect(50,100,200,50)
-    leaderButton = pygame.Rect(50,200,200,50)
-    quitButton = pygame.Rect(50,300,200,50)
+    playButton = pygame.Rect(50,150,200,50)
+    leaderButton = pygame.Rect(50,300,200,50)
+    quitButton = pygame.Rect(50,450,200,50)
 
-    pygame.draw.rect(screen, (0, 0, 0), playButton)
-    pygame.draw.rect(screen, (0, 0, 0), leaderButton)
-    pygame.draw.rect(screen, (0,0,0), quitButton)
+    pygame.draw.rect(screen, (255, 0, 0), playButton)
+    pygame.draw.rect(screen, (255, 0, 0), leaderButton)
+    pygame.draw.rect(screen, (255,0,0), quitButton)
+
     
 
     playText = font.render("Play", True, (255, 255, 255))
@@ -33,12 +38,30 @@ while running:
         pygame.draw.rect(screen, (100, 100, 100), leaderButton, 3)  # Highlight Leaderboard Button
     if quitButton.collidepoint(mousePos):
         pygame.draw.rect(screen, (100, 100, 100), quitButton, 3)  # Highlight Quit Button
+    
 
+    screen.blit(playText, (playButton.x + (playButton.width - playText.get_width()) // 2,
+                           playButton.y + (playButton.height - playText.get_height()) // 2))
+    screen.blit(leaderText, (leaderButton.x + (leaderButton.width - leaderText.get_width()) // 2,
+                             leaderButton.y + (leaderButton.height - leaderText.get_height()) // 2))
+    screen.blit(quitText, (quitButton.x + (quitButton.width - quitText.get_width()) // 2,
+                           quitButton.y + (quitButton.height - quitText.get_height()) // 2))
+
+    pygame.display.update()
+    clock.tick(60)
+
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                click = True
 
     if playButton.collidepoint(mousePos):
         if click:
             #game()
-            print('Play')
+            start_game()
     
     if leaderButton.collidepoint(mousePos):
         if click:
@@ -49,14 +72,6 @@ while running:
         if click:
             running=False
 
-    pygame.display.update()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                click = True
 
 pygame.display.quit()
 pygame.quit()
