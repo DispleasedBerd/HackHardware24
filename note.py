@@ -18,9 +18,12 @@ timing = 50
 
 def build_notes(tracks):
     for i in range(num_notes):
-        note_x.append(Track)
+        note_x.append(tracks[np.random.randint(4)])
         note_y.append(0-i*timing)
     return note_x, note_y
+
+def update_note_position(note_x, note_y, dt):
+    note_y += note_speed * dt
 
 class Note:
     def __init__(self, Track): # include track here for the track it is on
@@ -38,8 +41,7 @@ class Note:
     def draw_note(self, screen):
         pygame.draw.circle(screen, NOTE_COLOR, (self.note_x, int(self.note_y)), self.note_radius)
 
-    def update_note_position(self, dt):
-        self.note_y += self.note_speed * dt
+
 
     def is_in_score_zone(self):
         if track.hit_zone_y - self.note_radius <= self.note_y <= track.hit_zone_y + track.hit_zone_height:
