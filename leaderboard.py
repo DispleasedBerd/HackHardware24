@@ -117,8 +117,6 @@ leaderboard.add_score("Eve", 92)
 leaderboard.add_score("Frank", 80)  # Adding more entries will keep only top 5
 leaderboard.add_score("Grace", 98)
 
-displayLeaderboard()
-
 
 
 
