@@ -5,6 +5,7 @@ from track import Track
 import numpy as np
 import pygame
 import sys
+import leaderboard
 
 pygame.init()
 font = pygame.font.SysFont(None,40)
@@ -69,6 +70,11 @@ def start_game():
                             player_score.update_score(screen)
                             player_score.add_score(1)
                             note.respawn_note(i)
+
+        if player_score.score == 3:
+            name = 'Allen'
+            leaderboard.leaderboard.add_score(name,player_score.score)
+            leaderboard.displayLeaderboard()
                     
 
         for i in range(note.num_notes):
