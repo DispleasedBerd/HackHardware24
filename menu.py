@@ -1,5 +1,4 @@
-import pygame,sys, game2
-import leaderboard, game2
+import pygame,sys, game2, leaderboard, os
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -9,82 +8,109 @@ clock = pygame.time.Clock()
 skibidi = pygame.image.load("Assets/Skibidi.png")
 skibidi = pygame.transform.scale(skibidi,(1280,720))
 
-def start_menu():
+def get_beatmap_files(beatmap_folder):
+    return [file for file in os.listdir(beatmap_folder) if file.endswith('_beatmap.json')]
+
+def song_selection_menu(beatmap_folder):
+    beatmaps = get_beatmap_files(beatmap_folder)
+
+    if not beatmaps:
+        print("No beatmaps found!")
+        return None
+
     running = True
     while running:
-        mousePos = pygame.mouse.get_pos()
-        menuText = font.render("Play", True, (255,255,255))
-        screen.blit(menuText, (screen.get_width() // 2 - menuText.get_width() // 2,
-                            screen.get_height() // 2 - menuText.get_height() // 2))
+        screen.fill((0, 0, 0))
+        screen.blit(skibidi, (0, 0))
 
-        screen.blit(skibidi,(0,0))
-
+        mouse_pos = pygame.mouse.get_pos()
         click = False
 
-        playButton = pygame.Rect(50,150,200,50)
-        leaderButton = pygame.Rect(50,300,200,50)
-        settingsButton = pygame.Rect(50,450,200,50)
-        quitButton = pygame.Rect(50,600,200,50)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
 
-        pygame.draw.rect(screen, (255, 0, 0), playButton)
-        pygame.draw.rect(screen, (255, 0, 0), leaderButton)
-        pygame.draw.rect(screen, (255,0,0), quitButton)
-        pygame.draw.rect(screen, (255,0,0), settingsButton)
+        buttons = []
 
-        
+        for idx, beatmap in enumerate(beatmaps):
+            song_name = os.path.splitext(beatmap.replace("_beatmap", ""))[0]
+            song_text = font.render(f"{idx + 1}. {song_name}", True, (255, 255, 255))
+            text_rect = song_text.get_rect(center=(screen.get_width() // 2, 200 + idx * 50))
+            screen.blit(song_text, text_rect)
+            buttons.append((text_rect, beatmap))
 
-        playText = font.render("Play", True, (255, 255, 255))
-        leaderText = font.render("Leaderboard", True, (255, 255, 255))
-        quitText = font.render("Quit", True, (255, 255, 255))
-        settingsText = font.render("Settings", True, (255, 255, 255))
-
-        if playButton.collidepoint(mousePos):
-            pygame.draw.rect(screen, (100, 100, 100), playButton, 3)  # Highlight Play Button
-        if leaderButton.collidepoint(mousePos):
-            pygame.draw.rect(screen, (100, 100, 100), leaderButton, 3)  # Highlight Leaderboard Button
-        if settingsButton.collidepoint(mousePos):
-            pygame.draw.rect(screen, (100, 100, 100), settingsButton, 3)  # Highlight Quit Button
-        if quitButton.collidepoint(mousePos):
-            pygame.draw.rect(screen, (100, 100, 100), quitButton, 3)  # Highlight Settings Button
-        
-
-        screen.blit(playText, (playButton.x + (playButton.width - playText.get_width()) // 2,
-                            playButton.y + (playButton.height - playText.get_height()) // 2))
-        screen.blit(leaderText, (leaderButton.x + (leaderButton.width - leaderText.get_width()) // 2,
-                                leaderButton.y + (leaderButton.height - leaderText.get_height()) // 2))
-        screen.blit(quitText, (quitButton.x + (quitButton.width - quitText.get_width()) // 2,
-                            quitButton.y + (quitButton.height - quitText.get_height()) // 2))
-        screen.blit(settingsText, (settingsButton.x + (settingsButton.width - settingsText.get_width()) // 2,
-                            settingsButton.y + (settingsButton.height - settingsText.get_height()) // 2))
+        for rect, beatmap in buttons:
+            if rect.collidepoint(mouse_pos):
+                pygame.draw.rect(screen, (255, 255, 255), rect, 2)  # Highlight button
+                if click:
+                    return os.path.join(beatmap_folder, beatmap)  # Return selected beatmap
 
         pygame.display.update()
         clock.tick(60)
 
 
+def start_menu():
+    running = True
+    while running:
+        screen.blit(skibidi, (0, 0))
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        # Define buttons
+        play_button = pygame.Rect(50, 150, 200, 50)
+        leader_button = pygame.Rect(50, 300, 200, 50)
+        settings_button = pygame.Rect(50, 450, 200, 50)
+        quit_button = pygame.Rect(50, 600, 200, 50)
+
+        # Draw buttons
+        pygame.draw.rect(screen, (255, 0, 0), play_button)
+        pygame.draw.rect(screen, (255, 0, 0), leader_button)
+        pygame.draw.rect(screen, (255, 0, 0), settings_button)
+        pygame.draw.rect(screen, (255, 0, 0), quit_button)
+
+        # Render text
+        play_text = font.render("Play", True, (255, 255, 255))
+        leader_text = font.render("Leaderboard", True, (255, 255, 255))
+        settings_text = font.render("Settings", True, (255, 255, 255))
+        quit_text = font.render("Quit", True, (255, 255, 255))
+
+        screen.blit(play_text, (play_button.x + (play_button.width - play_text.get_width()) // 2,
+                                play_button.y + (play_button.height - play_text.get_height()) // 2))
+        screen.blit(leader_text, (leader_button.x + (leader_button.width - leader_text.get_width()) // 2,
+                                  leader_button.y + (leader_button.height - leader_text.get_height()) // 2))
+        screen.blit(settings_text, (settings_button.x + (settings_button.width - settings_text.get_width()) // 2,
+                                    settings_button.y + (settings_button.height - settings_text.get_height()) // 2))
+        screen.blit(quit_text, (quit_button.x + (quit_button.width - quit_text.get_width()) // 2,
+                                quit_button.y + (quit_button.height - quit_text.get_height()) // 2))
+
+        pygame.display.update()
+        clock.tick(60)
+
+        click = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
 
-        if playButton.collidepoint(mousePos):
-            if click:
-                #g start game
-                return
-        
-        if leaderButton.collidepoint(mousePos):
-            if click:
-                leaderboard.displayLeaderboard()
+        # Handle button clicks
+        if play_button.collidepoint(mouse_pos) and click:
+            beatmap_folder = "./assets/beatmaps"
+            selected_beatmap = song_selection_menu(beatmap_folder)
+            return selected_beatmap  # Return beatmap path to start the game
 
-        if quitButton.collidepoint(mousePos):
-            if click:
-                running=False
+        if leader_button.collidepoint(mouse_pos) and click:
+            leaderboard.displayLeaderboard()
 
-        if settingsButton.collidepoint(mousePos):
-            if click:
-                print("settings")
+        if settings_button.collidepoint(mouse_pos) and click:
+            print("Settings")
 
-    pygame.display.quit()
-    pygame.quit()
-    sys.exit()
+        if quit_button.collidepoint(mouse_pos) and click:
+            pygame.quit()
+            sys.exit()
+
+    return None
