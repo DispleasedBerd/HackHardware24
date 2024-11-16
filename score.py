@@ -2,7 +2,12 @@ import pygame
 import sys
 import track
 
+<<<<<<< HEAD
 #score properties
+=======
+
+#score
+>>>>>>> 2a6c7d5123ecf82e03d056c94698eac205ad7d44
 score = 0
 SCORE_COLOR = (255, 255, 0)
 
