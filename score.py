@@ -2,6 +2,7 @@ import pygame
 import sys
 import track
 
+
 #score
 score = 0
 SCORE_COLOR = (255, 255, 0)
