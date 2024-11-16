@@ -23,8 +23,8 @@ def start_menu():
 
         playButton = pygame.Rect(50,150,200,50)
         leaderButton = pygame.Rect(50,300,200,50)
-        quitButton = pygame.Rect(50,450,200,50)
-        settingsButton = pygame.Rect(50,600,200,50)
+        settingsButton = pygame.Rect(50,450,200,50)
+        quitButton = pygame.Rect(50,600,200,50)
 
         pygame.draw.rect(screen, (255, 0, 0), playButton)
         pygame.draw.rect(screen, (255, 0, 0), leaderButton)
@@ -42,10 +42,10 @@ def start_menu():
             pygame.draw.rect(screen, (100, 100, 100), playButton, 3)  # Highlight Play Button
         if leaderButton.collidepoint(mousePos):
             pygame.draw.rect(screen, (100, 100, 100), leaderButton, 3)  # Highlight Leaderboard Button
-        if quitButton.collidepoint(mousePos):
-            pygame.draw.rect(screen, (100, 100, 100), quitButton, 3)  # Highlight Quit Button
         if settingsButton.collidepoint(mousePos):
-            pygame.draw.rect(screen, (100, 100, 100), settingsButton, 3)  # Highlight Settings Button
+            pygame.draw.rect(screen, (100, 100, 100), settingsButton, 3)  # Highlight Quit Button
+        if quitButton.collidepoint(mousePos):
+            pygame.draw.rect(screen, (100, 100, 100), quitButton, 3)  # Highlight Settings Button
         
 
         screen.blit(playText, (playButton.x + (playButton.width - playText.get_width()) // 2,
@@ -75,7 +75,7 @@ def start_menu():
         
         if leaderButton.collidepoint(mousePos):
             if click:
-                leaderboard()
+                leaderboard.displayLeaderboard()
 
         if quitButton.collidepoint(mousePos):
             if click:

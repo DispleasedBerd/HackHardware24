@@ -10,7 +10,7 @@ pygame.init()
 font = pygame.font.SysFont(None,40)
 #frame rate
 clock = pygame.time.Clock()
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 750
+SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 
 
 def create_game():
