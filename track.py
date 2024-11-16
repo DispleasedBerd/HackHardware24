@@ -13,17 +13,20 @@ TRACK_NUM = 4
 track_x = {"LEFT":185,"DOWN":295,"UP":405,"RIGHT":515}
 INPUT = {"LEFT": pygame.K_LEFT,"DOWN": pygame.K_DOWN,"UP":pygame.K_UP,"RIGHT":pygame.K_RIGHT}
 
+
 #hit zone
 hit_zone_y = SCREEN_HEIGHT - 100
 hit_zone_height = 10
 
-def draw_track(screen):
-        left = Track("LEFT")
-        down = Track("DOWN")
-        up = Track("UP")
-        right = Track("RIGHT")
-        tracks = [left,down, up, right]
+def build_tracks():
+    left = Track("LEFT")
+    down = Track("DOWN")
+    up = Track("UP")
+    right = Track("RIGHT")
+    tracks = [left,down, up, right]
+    return tracks
 
+def draw_track(screen, tracks):
         for t in tracks:
             pygame.draw.rect(screen, t.TRACK_COLOR, (t.x, 0, t.TRACK_WIDTH, SCREEN_HEIGHT))
 
