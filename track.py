@@ -16,7 +16,7 @@ INPUT = {"LEFT": pygame.K_LEFT,"DOWN": pygame.K_DOWN,"UP":pygame.K_UP,"RIGHT":py
 
 #hit zone
 hit_zone_y = SCREEN_HEIGHT - 100
-hit_zone_height = 10
+hit_zone_height = 25
 
 def build_tracks():
     left = Track("LEFT")

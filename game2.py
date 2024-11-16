@@ -38,18 +38,18 @@ def start_game():
         # if clock.get_time() % 250 == 0:
             
         # print('second')
-        for i in range(note.num_notes): # hard coded here
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                if event.type == pygame.KEYDOWN:
+            # print(note.is_in_score_zone(i))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                for i in range(note.num_notes): # hard coded here
                     if event.key == tracks[0].INPUT:
                         #check if note in hit zone
-                        print(note.is_in_score_zone(i))
                         if note.is_in_score_zone(i):
                             player_score.update_score(screen)
                             player_score.add_score(1)
-                            note.reset_note(i)
+                            note.respawn_note(i)
                     # if event.key == tracks[1].INPUT:
                     #     #check if note in hit zone
                     #     if track.hit_zone_y - note.note_radius <= note2.note_y <= track.hit_zone_y + track.hit_zone_height:
@@ -57,10 +57,13 @@ def start_game():
                     #         player_score.add_score(1)
                     #         note2.reset_note()
 
+        for i in range(note.num_notes):
             note.update_note_position(i, dt)
-            if note.get_y(i) > track.SCREEN_HEIGHT + note.note_radius:
+
+            if note.missed_note(i):
                 print("note missed, no score added.")
-                note.reset_note(i)
+                note.respawn_note(i)
+                # note.reset_note(i)
 
             #update screen
             
@@ -68,7 +71,7 @@ def start_game():
 
             # player_score.draw_score(screen)
 
-            pygame.display.update()
+        pygame.display.update()
 
         screen.fill(track.BACKGROUND_COLOR)
         track.draw_track(screen, tracks)
