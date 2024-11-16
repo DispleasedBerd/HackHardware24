@@ -41,9 +41,9 @@ def start_game():
 
         pygame.display.flip()
         clock.tick(60)
-
+  
     pygame.quit()
-    sys.exit()
+    sys.exit()  
 
 if __name__ == "__main__":
     start_game()
