@@ -3,14 +3,16 @@ import pygame
 import sys
 
 pygame.init()
-
+font = pygame.font.SysFont(None,40)
 #frame rate
 clock = pygame.time.Clock()
 
 screen = track.create_track()
 
 def start_game():
-    global note_y, score
+    menu.start_menu()
+    global note_y, player_score
+    player_score = 0
     running = True
     start_time = pygame.time.get_ticks()/1000
 
