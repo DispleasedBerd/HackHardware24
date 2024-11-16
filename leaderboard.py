@@ -1,5 +1,5 @@
 # Leaderboard implementation allowing one player to occupy multiple spots
-import pygame,sys
+import pygame,sys,menu
 
 def displayLeaderboard():
 
@@ -48,6 +48,21 @@ def displayLeaderboard():
             screen.blit(rankGlow,(480, 100+100*rank))
 
 
+            color=(255,255,255)
+            pygame.draw.rect(screen,color,pygame.Rect(400,50,480,620),2,3)
+
+
+            backButton = pygame.Rect((50,600,200,50))
+            pygame.draw.rect(screen, (255,255,255), backButton,2,3)
+            backText = fontSmall.render("back", True, (255, 255, 255))
+            if backButton.collidepoint(mousePos):
+                pygame.draw.rect(screen, (100, 100, 100), backButton, 2,3)  # Highlight Quit Button
+                backText = fontSmall.render("back", True, (100, 100, 100))
+
+            screen.blit(backText, (backButton.x + (backButton.width - backText.get_width()) // 2,
+                            backButton.y + (backButton.height - backText.get_height()) // 2))
+
+
 
 
 
@@ -64,6 +79,12 @@ def displayLeaderboard():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+
+        
+        if backButton.collidepoint(mousePos):
+            if click:
+                menu.start_menu()
+    
     pygame.display.quit()
     pygame.quit()
     sys.exit()
