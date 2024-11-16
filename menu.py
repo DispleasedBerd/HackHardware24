@@ -75,8 +75,7 @@ def start_menu():
         
         if leaderButton.collidepoint(mousePos):
             if click:
-                #leaderboard()
-                print('Leaderboard')
+                leaderboard()
 
         if quitButton.collidepoint(mousePos):
             if click:
