@@ -17,6 +17,10 @@ note_radii = []
 num_notes = 2
 timing = 50
 
+def note_exists(i):
+    if note_x[i] != None:
+        return True
+
 def build_notes(tracks):
     for i in range(num_notes):
         note_x.append(tracks[0].x + 50)
@@ -24,23 +28,39 @@ def build_notes(tracks):
         note_radii.append(note_radius)
 
 def update_note_position(i, dt):
-    note_y[i] += note_speed * dt
+    if note_exists(i):
+        note_y[i] += note_speed * dt
 
 def draw_note(i, screen):
-    pygame.draw.circle(screen, NOTE_COLOR, (int(note_x[i]), int(note_y[i])), note_radius)
+    if note_exists(i):
+        pygame.draw.circle(screen, NOTE_COLOR, (int(note_x[i]), int(note_y[i])), note_radii[i])
 
 def reset_note(i):
-    note_y[i] = -note_radii[i]
+    note_x[i] = None
+    note_y[i] = None
+    note_radii[i] = None
+    # note_y[i] = -note_radii[i]
 
 def get_y(i):
-    return note_y[i]
+    if note_exists(i):
+        return note_y[i]
 
 def is_in_score_zone(i):
+    if note_exists(i):
         if track.hit_zone_y - note_radius <= note_y[i] <= track.hit_zone_y + track.hit_zone_height:
             return True
         else:
             return False
 
+def respawn_note(i):
+    if note_exists(i):
+        note_y[i] = 0
+        
+def missed_note(i):
+    if note_exists(i):
+        return get_y(i) > track.SCREEN_HEIGHT + note_radii[i]
+    else:
+        False
 class Note:
     def __init__(self, Track): # include track here for the track it is on
         self.NOTE_COLOR = NOTE_COLOR
