@@ -16,13 +16,13 @@ def displayLeaderboard():
         mousePos = pygame.mouse.get_pos()
 
         screen.blit(gradient,(0,0))
-        menuText = font.render("Leaderboard", True, (255,255,255))
+        menuText = font.render("HIGH SCORES", True, (255,255,255))
 
         click = False
 
         LeaderRect = pygame.Rect(screen.get_width()//2 - menuText.get_width() //2 ,screen.get_height()//6 - menuText.get_height() // 2, menuText.get_width(),menuText.get_height())
 
-        pygame.draw.rect(screen, (255, 0, 0), LeaderRect)
+        #pygame.draw.rect(screen, (255, 0, 0), LeaderRect)
 
         screen.blit(menuText, (screen.get_width() // 2 - menuText.get_width() // 2,
                             screen.get_height() // 6 - menuText.get_height() // 2))
@@ -35,13 +35,17 @@ def displayLeaderboard():
             score = entry['score']
             nameText = fontSmall.render(f'{name}',True,(0,0,0))
             scoreText = fontSmall.render(f'{score}',True,(0,0,0))
-            screen.blit(nameText, (screen.get_width() // 2 - nameText.get_width() // 2 - 50, 100+100*rank))
-            screen.blit(scoreText,(screen.get_width() // 2 - scoreText.get_width() // 2 + 50, 100+100*rank))
+            rankText = fontSmall.render(f'{rank}. ',True,(0,0,0))
+            screen.blit(nameText, (screen.get_width() // 2 - nameText.get_width() // 2 - 80, 100+100*rank))
+            screen.blit(scoreText,(screen.get_width() // 2 - scoreText.get_width() // 2 + 120, 100+100*rank))
+            screen.blit(rankText,(480, 100+100*rank))
 
             nameGlow = fontGlow.render(f'{name}',True,(255,255,255))
             scoreGlow = fontGlow.render(f'{score}',True,(255,255,255))
-            screen.blit(nameGlow, (screen.get_width() // 2 - nameText.get_width() // 2 - 50, 100+100*rank))
-            screen.blit(scoreGlow,(screen.get_width() // 2 - scoreText.get_width() // 2 + 50, 100+100*rank))
+            rankGlow = fontGlow.render(f'{rank}. ',True,(255,255,255))
+            screen.blit(nameGlow, (screen.get_width() // 2 - nameText.get_width() // 2 - 80, 100+100*rank))
+            screen.blit(scoreGlow,(screen.get_width() // 2 - scoreText.get_width() // 2 + 120, 100+100*rank))
+            screen.blit(rankGlow,(480, 100+100*rank))
 
 
 
