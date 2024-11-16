@@ -1,4 +1,4 @@
-import pygame,sys
+import pygame,sys, game2
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Menu")
@@ -26,8 +26,6 @@ while running:
     pygame.draw.rect(screen, (255, 0, 0), leaderButton)
     pygame.draw.rect(screen, (255,0,0), quitButton)
 
-    
-
     playText = font.render("Play", True, (255, 255, 255))
     leaderText = font.render("Leaderboard", True, (255, 255, 255))
     quitText = font.render("Quit", True, (255, 255, 255))
@@ -50,7 +48,6 @@ while running:
     pygame.display.update()
     clock.tick(60)
 
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -61,7 +58,7 @@ while running:
     if playButton.collidepoint(mousePos):
         if click:
             #game()
-            start_game()
+            game2.start_game() 
     
     if leaderButton.collidepoint(mousePos):
         if click:
