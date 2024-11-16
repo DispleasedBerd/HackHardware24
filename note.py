@@ -14,6 +14,7 @@ track_x = {"LEFT":185,"DOWN":295,"UP":405,"RIGHT":515}
 note_x = []
 note_y = []
 note_radii = []
+note_track = []
 num_notes = 2
 timing = 50
 
@@ -23,9 +24,15 @@ def note_exists(i):
 
 def build_notes(tracks):
     for i in range(num_notes):
-        note_x.append(tracks[0].x + 50)
+        t = np.random.randint(4)
+        note_x.append(tracks[t].x + 50)
         note_y.append(0-i*timing)
         note_radii.append(note_radius)
+        note_track.append(tracks[t].pos)
+
+def get_note_track(i):
+    if note_exists(i):
+        return note_track[i]
 
 def update_note_position(i, dt):
     if note_exists(i):
