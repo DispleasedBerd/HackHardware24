@@ -21,14 +21,15 @@ def create_game():
 def start_game():
     global screen
     screen = create_game()
+
     menu.start_menu()
+
     tracks = track.draw_track(screen, track.build_tracks())
     note.build_notes(tracks)
-    # global note1
-    # note1 = Note(tracks[0])
-    # note2 = Note(tracks[1])
+
     global player_score
     player_score = Score()
+
     running = True
     start_time = pygame.time.get_ticks()/1000
 
@@ -44,18 +45,31 @@ def start_game():
                 running = False
             if event.type == pygame.KEYDOWN:
                 for i in range(note.num_notes): # hard coded here
-                    if event.key == tracks[0].INPUT:
+                    if event.key == tracks[0].INPUT and note.get_note_track(i) == tracks[0].pos:
                         #check if note in hit zone
                         if note.is_in_score_zone(i):
                             player_score.update_score(screen)
                             player_score.add_score(1)
                             note.respawn_note(i)
-                    # if event.key == tracks[1].INPUT:
-                    #     #check if note in hit zone
-                    #     if track.hit_zone_y - note.note_radius <= note2.note_y <= track.hit_zone_y + track.hit_zone_height:
-                    #         player_score.update_score(screen)
-                    #         player_score.add_score(1)
-                    #         note2.reset_note()
+                    if event.key == tracks[1].INPUT and note.get_note_track(i) == tracks[1].pos:
+                        #check if note in hit zone
+                        if note.is_in_score_zone(i):
+                            player_score.update_score(screen)
+                            player_score.add_score(1)
+                            note.respawn_note(i)
+                    if event.key == tracks[2].INPUT and note.get_note_track(i) == tracks[2].pos:
+                        #check if note in hit zone
+                        if note.is_in_score_zone(i):
+                            player_score.update_score(screen)
+                            player_score.add_score(1)
+                            note.respawn_note(i)
+                    if event.key == tracks[3].INPUT and note.get_note_track(i) == tracks[3].pos:
+                        #check if note in hit zone
+                        if note.is_in_score_zone(i):
+                            player_score.update_score(screen)
+                            player_score.add_score(1)
+                            note.respawn_note(i)
+                    
 
         for i in range(note.num_notes):
             note.update_note_position(i, dt)
