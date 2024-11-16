@@ -22,11 +22,11 @@ def start_game():
     global screen
     screen = create_game()
     menu.start_menu()
-    
     tracks = track.draw_track(screen, track.build_tracks())
-    global note1
-    note1 = Note(tracks[0])
-    note2 = Note(tracks[1])
+    note.build_notes(tracks)
+    # global note1
+    # note1 = Note(tracks[0])
+    # note2 = Note(tracks[1])
     global player_score
     player_score = Score()
     running = True
@@ -37,42 +37,41 @@ def start_game():
         dt = clock.get_time() / 1000
         # if clock.get_time() % 250 == 0:
             
-        #     print('second')
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == tracks[0].INPUT:
-                    #check if note in hit zone
-                    if track.hit_zone_y - note.note_radius <= note1.note_y <= track.hit_zone_y + track.hit_zone_height:
-                        player_score.update_score(screen)
-                        player_score.add_score(1)
-                        note1.reset_note()
-                if event.key == tracks[1].INPUT:
-                    #check if note in hit zone
-                    if track.hit_zone_y - note.note_radius <= note2.note_y <= track.hit_zone_y + track.hit_zone_height:
-                        player_score.update_score(screen)
-                        player_score.add_score(1)
-                        note2.reset_note()
+        # print('second')
+        for i in range(note.num_notes): # hard coded here
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == tracks[0].INPUT:
+                        #check if note in hit zone
+                        print(note.is_in_score_zone(i))
+                        if note.is_in_score_zone(i):
+                            player_score.update_score(screen)
+                            player_score.add_score(1)
+                            note.reset_note(i)
+                    # if event.key == tracks[1].INPUT:
+                    #     #check if note in hit zone
+                    #     if track.hit_zone_y - note.note_radius <= note2.note_y <= track.hit_zone_y + track.hit_zone_height:
+                    #         player_score.update_score(screen)
+                    #         player_score.add_score(1)
+                    #         note2.reset_note()
 
-        note1.update_note_position(dt)
-        note2.update_note_position(dt)
+            note.update_note_position(i, dt)
+            if note.get_y(i) > track.SCREEN_HEIGHT + note.note_radius:
+                print("note missed, no score added.")
+                note.reset_note(i)
 
-        if note1.note_y > track.SCREEN_HEIGHT + note1.note_radius:
-            print("note missed, no score added.")
-            note1.reset_note()
-        if note2.note_y > track.SCREEN_HEIGHT + note2.note_radius:
-            print("note missed, no score added.")
-            note2.reset_note()
+            #update screen
+            
+            note.draw_note(i, screen)
 
-        #update screen
+            # player_score.draw_score(screen)
+
+            pygame.display.update()
+
         screen.fill(track.BACKGROUND_COLOR)
-        track.draw_track(screen)
-        note1.draw_note(screen)
-        note2.draw_note(screen)
-        # player_score.draw_score(screen)
-
-        pygame.display.flip()
+        track.draw_track(screen, tracks)
         clock.tick(60)
   
     pygame.quit()
