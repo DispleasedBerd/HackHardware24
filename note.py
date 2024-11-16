@@ -15,7 +15,7 @@ note_x = []
 note_y = []
 note_radii = []
 note_track = []
-num_notes = 2
+num_notes = 1
 timing = 50
 
 def note_exists(i):
@@ -68,6 +68,14 @@ def missed_note(i):
         return get_y(i) > track.SCREEN_HEIGHT + note_radii[i]
     else:
         False
+
+def calculate_score(i):    
+    center = track.hit_zone_y+track.hit_zone_height/2
+    max_score = 100
+    distance = abs(note_y[i]-center)
+    score = (track.hit_zone_height/2) // (distance+1) + 1
+    return score
+
 class Note:
     def __init__(self, Track): # include track here for the track it is on
         self.NOTE_COLOR = NOTE_COLOR
@@ -79,17 +87,6 @@ class Note:
         print(Track.x)
 
     
-
-    
-
-
-
-    
-            
-    def calculate_score(self):
-        max_score = 100
-        distance = abs(self.note_y-track.hit_zone_y)
-        score = max_score*2.7**(-distance)
 
 if __name__ == "__main__":
     tracks = track.build_tracks()
