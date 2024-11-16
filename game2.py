@@ -1,5 +1,7 @@
 import note, music, menu, track 
 from score import Score
+from note import Note
+from track import Track
 import pygame
 import sys
 
@@ -7,41 +9,51 @@ pygame.init()
 font = pygame.font.SysFont(None,40)
 #frame rate
 clock = pygame.time.Clock()
+SCREEN_WIDTH, SCREEN_HEIGHT = 800, 750
 
-screen = track.create_track()
+
+def create_game():
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("HackHardware24 - One Column")
+    return screen
 
 def start_game():
+    global screen
+    screen = create_game()
     menu.start_menu()
-    global note_y, player_score
+    tracks = track.draw_track(screen)
+    global note1
+    note1 = Note(tracks[0])
+    global player_score
     player_score = Score()
     running = True
     start_time = pygame.time.get_ticks()/1000
 
     while running:
-        player_score.update_score()
+        player_score.update_score(screen)
         dt = clock.get_time() / 1000
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == tracks[0].INPUT:
                     #check if note in hit zone
-                    if track.hit_zone_y - note.note_radius <= note.note_y <= track.hit_zone_y + track.hit_zone_height:
-                        player_score.update_score()
+                    if track.hit_zone_y - note.note_radius <= note1.note_y <= track.hit_zone_y + track.hit_zone_height:
+                        player_score.update_score(screen)
                         player_score.add_score(1)
-                        note.reset_note()
+                        note1.reset_note()
 
-        note.update_note_position(dt)
+        note1.update_note_position(dt)
 
-        if note.note_y > track.SCREEN_HEIGHT + note.note_radius:
+        if note1.note_y > track.SCREEN_HEIGHT + note1.note_radius:
             print("note missed, no score added.")
-            note.reset_note()
+            note1.reset_note()
 
         #update screen
         screen.fill(track.BACKGROUND_COLOR)
-        track.draw_track()
-        note.draw_note()
+        track.draw_track(screen)
+        note1.draw_note(screen)
         # player_score.draw_score(screen)
 
         pygame.display.flip()

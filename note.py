@@ -9,27 +9,31 @@ note_x = track.SCREEN_WIDTH // 2
 note_y = 0  # Start at the top of the screen
 note_speed = 200  # Pixels per second
 
-def create_note():
-    global note_y
-    note_y = 0
+class Note:
+    def __init__(self, Track): # include track here for the track it is on
+        self.NOTE_COLOR = NOTE_COLOR
+        self.note_radius = note_radius
+        self.note_x = Track.x + 50 # should be changed to center of the track it is initialized on
+        self.note_y = note_y
+        self.note_speed = note_speed
+        self.track = track #left, right, up, down
 
-def reset_note():
-    global note_y
-    note_y = -note_radius
+    def reset_note(self):
+        self.note_y = -self.note_radius
 
-def draw_note():
-    pygame.draw.circle(track.screen, NOTE_COLOR, (note_x, int(note_y)), note_radius)
+    def draw_note(self, screen):
+        pygame.draw.circle(screen, self.NOTE_COLOR, (self.note_x, int(self.note_y)), self.note_radius)
 
-def update_note_position(dt):
-    global note_y
-    note_y += note_speed * dt
+    def update_note_position(self, dt):
+        self.note_y += self.note_speed * dt
 
-def is_in_score_zone(note):
-        if track.hit_zone_y - note.note_radius <= note.note_y <= track.hit_zone_y + track.hit_zone_height:
+    def is_in_score_zone(self):
+        if track.hit_zone_y - self.note_radius <= self.note_y <= track.hit_zone_y + track.hit_zone_height:
             return True
         else:
             return False
-def calculate_score(note):
+            
+    def calculate_score(self):
         max_score = 100
-        distance = abs(note.note_y-track.hit_zone_y)
+        distance = abs(self.note_y-track.hit_zone_y)
         score = max_score*2.7**(-distance)
