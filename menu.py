@@ -39,7 +39,7 @@ def song_selection_menu(beatmap_folder):
         for idx, beatmap in enumerate(beatmaps):
             song_name = os.path.splitext(beatmap.replace("_beatmap", ""))[0]
             song_text = font.render(f"{idx + 1}. {song_name}", True, (255, 255, 255))
-            text_rect = song_text.get_rect(center=(screen.get_width() // 2, 200 + idx * 50))
+            text_rect = song_text.get_rect(center=(screen.get_width() // 2, (screen.get_height() // 2 - 25) + idx * 50))
             screen.blit(song_text, text_rect)
             buttons.append((text_rect, beatmap))
 
