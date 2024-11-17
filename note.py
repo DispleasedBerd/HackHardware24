@@ -47,7 +47,10 @@ class Note:
 
     def missed(self, screen_height):
         """Check if the note has moved off the screen."""
-        return self.y > screen_height
+        if self.active and self.y > screen_height:
+            self.active = False
+            return True
+        return False
 
     def calculate_score(self, hit_zone_y):
         """Calculate the score based on the distance from the hit zone."""
