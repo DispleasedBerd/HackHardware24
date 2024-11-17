@@ -107,6 +107,7 @@ def start_game(beatmap_path):
         player_score.update_score(screen)
         player_score.update_combo(screen)
         player_score.update_multiplier(screen)
+        player_score.update_lives(screen)
         # closest = nt.find_closest(notes)
 
         dt = clock.get_time() / 1000
@@ -127,33 +128,21 @@ def start_game(beatmap_path):
                             print("Note hit in zone")
                             player_score.add_score(player_score.calculate_score(note), note, screen)
                             player_score.add_combo(screen)
-                        else:
-                            #print("Note missed")
-                            player_score.reset_combo(screen)
-                    elif event.key == tracks[1].input_key:
+                    elif event.key == tracks[1].input_key and note.track_index == tracks[1].pos:
                         #check if note in hit zone
                         if note.is_in_score_zone():
                             player_score.add_score(player_score.calculate_score(note), note, screen)
                             player_score.add_combo(screen)
-                        else:
-                            print("Note missed")
-                            # player_score.reset_combo(screen)
-                    elif event.key == tracks[2].input_key:
+                    elif event.key == tracks[2].input_key and note.track_index == tracks[2].pos:
                         #check if note in hit zone
                         if note.is_in_score_zone():
                             player_score.add_score(player_score.calculate_score(note), note, screen)
                             player_score.add_combo(screen)
-                        else:
-                            print("Note missed")
-                            # player_score.reset_combo(screen)
-                    elif event.key == tracks[3].input_key:
+                    elif event.key == tracks[3].input_key and note.track_index == tracks[3].pos:
                         #check if note in hit zone
                         if note.is_in_score_zone():
                             player_score.add_score(player_score.calculate_score(note), note, screen)
-                            player_score.add_combo(screen)
-                        else:
-                            print("Note missed")
-                            # player_score.reset_combo(screen)          
+                            player_score.add_combo(screen)        
 
         for note in notes:
             if note.active and current_time >= note.time:
@@ -165,6 +154,8 @@ def start_game(beatmap_path):
                     # print("before",closest[note.track_index])
                     # print("after",closest[note.track_index])
                     player_score.reset_combo(screen)
+                    if player_score.lives <= 0:
+                        leaderboard.displayLeaderboard()
 
 
         # Refresh the display
