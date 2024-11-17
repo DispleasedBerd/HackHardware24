@@ -11,6 +11,7 @@ import pygame.mixer
 
 pygame.init()
 font = pygame.font.SysFont(None, 40)
+muted = False
 
 # Frame rate
 clock = pygame.time.Clock()
@@ -55,8 +56,9 @@ def start_game(beatmap_path):
     audio_path = f"./assets/audio/{audio_file}"
     pygame.mixer.init()
     try:
-        pygame.mixer.music.load(audio_path)
-        pygame.mixer.music.play()
+        if not muted:
+            pygame.mixer.music.load(audio_path)
+            pygame.mixer.music.play()
     except pygame.error as e:
         print(f"Error loading audio file: {e}")
         pygame.quit()
@@ -131,12 +133,12 @@ def start_game(beatmap_path):
                             player_score.add_combo(screen)  
                             break      
 
-                if not key_matched:
-                    print(f"Note missed at y={note.y}")
-                    player_score.lives -= 1
-                    player_score.reset_combo(screen)
-                    if player_score.lives <= 0:
-                        gameOver.displayGameOver(screen,player_score)
+                # if not key_matched:
+                #     print(f"Note missed at y={note.y}")
+                #     player_score.lives -= 1
+                #     player_score.reset_combo(screen)
+                #     if player_score.lives <= 0:
+                #         gameOver.displayGameOver(screen,player_score)
 
         for note in notes:
             if note.active and current_time >= note.time:
@@ -146,8 +148,8 @@ def start_game(beatmap_path):
                 if note.missed(SCREEN_HEIGHT):
                     note.active = False 
                     player_score.reset_combo(screen)
-                    player_score.lives -= 1  # Deduct a life
-                    if player_score.lives <= 7:
+                    # player_score.lives -= 1  # Deduct a life
+                    if player_score.lives <= 0:
                         gameOver.displayGameOver(screen, player_score)
                         # pygame.time.delay(60000
                         
