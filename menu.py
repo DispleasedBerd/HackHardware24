@@ -5,7 +5,7 @@ screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Menu")
 font = pygame.font.SysFont(None,40)
 clock = pygame.time.Clock()
-skibidi = pygame.image.load("Assets/Skibidi.png")
+skibidi = pygame.image.load("Assets/synthwave.png")
 skibidi = pygame.transform.scale(skibidi,(1280,720))
 
 

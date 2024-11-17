@@ -103,15 +103,11 @@ def start_game(beatmap_path):
                 for note in notes:
 
                     if event.key == tracks[0].input_key and note.track_index == tracks[0].pos:
-                        key_matched = True
-                        print("1")
                         if note.is_in_score_zone():
                             player_score.add_score(player_score.calculate_score(note), note, screen)
                             player_score.add_combo(screen)
                             break
                     elif event.key == tracks[1].input_key and note.track_index == tracks[1].pos:
-                        print("2")
-                        key_matched = True
                             #check if note in hit zone
                         if note.is_in_score_zone():
                             player_score.add_score(player_score.calculate_score(note), note, screen)
@@ -119,16 +115,12 @@ def start_game(beatmap_path):
                             break
                     elif event.key == tracks[2].input_key and note.track_index == tracks[2].pos:
                         #check if note in hit zone
-                        print("3")
-                        key_matched=True
                         if note.is_in_score_zone():
                             player_score.add_score(player_score.calculate_score(note), note, screen)
                             player_score.add_combo(screen)
                             break
                     elif event.key == tracks[3].input_key and note.track_index == tracks[3].pos:
                         #check if note in hit zone
-                        print("4")
-                        key_matched=True
                         if note.is_in_score_zone():
                             player_score.add_score(player_score.calculate_score(note), note, screen)
                             player_score.add_combo(screen)  
