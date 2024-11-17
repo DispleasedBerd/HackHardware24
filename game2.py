@@ -81,9 +81,9 @@ def start_game(beatmap_path):
                             player_score.add_score(note.calculate_score(i))
                             note.respawn_note(i)
 
-        if player_score.score == 3:
+        if player_score.player_score == 3:
             name = 'Allen'
-            leaderboard.leaderboard.add_score(name,player_score.score)
+            leaderboard.leaderboard.add_score(name,player_score.player_score)
             leaderboard.displayLeaderboard()
                     
 
