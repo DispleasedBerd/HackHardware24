@@ -103,16 +103,68 @@ def start_game(beatmap_path):
 
         # Update and display the score
         player_score.update_score(screen)
+        player_score.update_combo(screen)
+        player_score.update_multiplier(screen)
 
-        # Update and draw notes
+
+        dt = clock.get_time() / 1000
+
+        # Initialize a dictionary to track the pressed state of keys
+        key_states = {track.input_key: False for track in tracks}
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                print(f"KEYDOWN: {pygame.key.name(event.key)}")
+                for note in notes:
+                    if event.key == tracks[0].input_key and note.track_index == tracks[0].pos:
+                        #check if note in hit zone
+                        if note.is_in_score_zone():
+                            print("Note hit in zone")
+                            player_score.add_score(player_score.calculate_score(note), note, screen)
+                            player_score.add_combo(screen)
+                        else:
+                            print("Note missed")
+                            # player_score.reset_combo(screen)
+                    elif event.key == tracks[1].input_key and note.track_index == tracks[1].pos:
+                        #check if note in hit zone
+                        if note.is_in_score_zone():
+                            player_score.add_score(player_score.calculate_score(note), note, screen)
+                            player_score.add_combo(screen)
+                        else:
+                            print("Note missed")
+                            # player_score.reset_combo(screen)
+                    elif event.key == tracks[2].input_key and note.track_index == tracks[2].pos:
+                        #check if note in hit zone
+                        if note.is_in_score_zone():
+                            player_score.add_score(player_score.calculate_score(note), note, screen)
+                            player_score.add_combo(screen)
+                        else:
+                            print("Note missed")
+                            # player_score.reset_combo(screen)
+                    elif event.key == tracks[3].input_key and note.track_index == tracks[3].pos:
+                        #check if note in hit zone
+                        if note.is_in_score_zone():
+                            player_score.add_score(player_score.calculate_score(note), note, screen)
+                            player_score.add_combo(screen)
+                        else:
+                            print("Note missed")
+                            # player_score.reset_combo(screen)
+            if event.type == pygame.KEYUP:
+                print(f"KEYUP: {pygame.key.name(event.key)}")
+            
+        
+       
         for note in notes:
             if note.active and current_time >= note.time:
                 note.update_position(dt)
                 note.draw(screen)
 
-                if note.missed(track.SCREEN_HEIGHT):
-                    print("Note missed!")
-                    note.active = False
+                if note.missed(SCREEN_HEIGHT):
+                    note.active = False 
+                    player_score.reset_combo(screen)
+
 
         # Refresh the display
         pygame.display.flip()
