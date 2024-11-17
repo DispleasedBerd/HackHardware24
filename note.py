@@ -1,4 +1,4 @@
-import pygame
+import pygame, track
 
 # Constants
 NOTE_COLOR = (255, 255, 255)
@@ -32,9 +32,9 @@ class Note:
         if self.active:
             pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
 
-    def is_in_score_zone(self, hit_zone_y, hit_zone_height):
+    def is_in_score_zone(self):
         """Check if the note is in the hit zone."""
-        return hit_zone_y - self.radius <= self.y <= hit_zone_y + hit_zone_height
+        return track.HIT_ZONE_Y - self.radius <= self.y <= track.HIT_ZONE_Y + track.HIT_ZONE_HEIGHT
 
     def missed(self, screen_height):
         """Check if the note has moved off the screen."""
