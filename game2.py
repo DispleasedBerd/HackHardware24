@@ -94,7 +94,7 @@ def start_game(beatmap_path):
                                 and note.is_in_score_zone(track.HIT_ZONE_Y, track.HIT_ZONE_HEIGHT)
                             ):
                                 print("Note hit!")
-                                player_score.add_score(1)
+                                player_score.add_score(1, screen)
                                 note.active = False  # Deactivate the note
                                 break
 
