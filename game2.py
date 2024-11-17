@@ -99,6 +99,7 @@ def start_game(beatmap_path):
                 key_matched = False
 
                 for note in notes:
+
                     if event.key == tracks[0].input_key and note.track_index == tracks[0].pos:
                         key_matched = True
                         print("1")
@@ -130,7 +131,7 @@ def start_game(beatmap_path):
                             player_score.add_score(player_score.calculate_score(note), note, screen)
                             player_score.add_combo(screen)  
                             break      
-
+                        
                 if not key_matched:
                     print(f"Note missed at y={note.y}")
                     player_score.lives -= 1
@@ -144,12 +145,13 @@ def start_game(beatmap_path):
                 note.draw(screen)
 
                 if note.missed(SCREEN_HEIGHT):
+                    print(f"Note missed at y={note.y}, lives reduced to {player_score.lives}")
+                    player_score.lives -= 1  # Deduct a life
                     note.active = False 
                     player_score.reset_combo(screen)
-                    player_score.lives -= 1  # Deduct a life
-                    if player_score.lives <= 7:
+                    if player_score.lives <= 0:
                         gameOver.displayGameOver(screen, player_score)
-                        # pygame.time.delay(60000
+                        # pygame.time.delay(60000)
                         
         # Refresh the display
         pygame.display.flip()
