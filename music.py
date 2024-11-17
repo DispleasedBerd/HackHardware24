@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 # Add the directory containing beatmap.py to the system path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -32,3 +33,7 @@ try:
 
 except Exception as e:
     print(f"An error occurred: {e}")
+
+def load_beatmap(beatmap_path):
+    with open(beatmap_path, 'r') as f:
+        return json.load(f)
