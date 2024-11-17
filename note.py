@@ -38,9 +38,9 @@ class Note:
             pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
 
     def is_in_score_zone(self):
-        if track.HIT_ZONE_Y is None or track.HIT_ZONE_HEIGHT is None:
-            print("Error: hit_zone_y or hit_zone_height not provided")
-            return False
+        #if track.HIT_ZONE_Y is None or track.HIT_ZONE_HEIGHT is None:
+         #   print("Error: hit_zone_y or hit_zone_height not provided")
+          #  return False
         return (
         track.HIT_ZONE_Y - self.radius - 10 <= self.y <= track.HIT_ZONE_Y + track.HIT_ZONE_HEIGHT + 10
         )

@@ -41,6 +41,6 @@ def display_beatmap(beatmap):
     for note in beatmap:
         print(f"Time: {note['time']:.2f}s, Track: {note['track']}")
 
-def select_beatmap():
+#def select_beatmap():
         
-    return selected_beatmap
+    #return selected_beatmap
