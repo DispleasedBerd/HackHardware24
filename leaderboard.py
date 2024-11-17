@@ -98,6 +98,13 @@ class Leaderboard:
     def add_score(self, name, score):
         # Add a new entry for the player's score
         self.leaderboard.append({"name": name, "score": score})
+        leaderboard.add_score("Player 1", 0)
+        leaderboard.add_score("Player 2", 0)
+        leaderboard.add_score("Player 3", 0)  # Alice can occupy multiple spots
+        leaderboard.add_score("Player 4", 0)
+        leaderboard.add_score("Allan", 0)
+        leaderboard.add_score("Player 6", 0)  # Adding more entries will keep only top 5
+        leaderboard.add_score("Player 7", 0)
 
         # Sort the leaderboard by score in descending order and keep only top 5 entries
         self.leaderboard = sorted(self.leaderboard, key=lambda entry: entry["score"], reverse=True)[:5]
@@ -109,13 +116,13 @@ class Leaderboard:
 
 # Usage
 leaderboard = Leaderboard()
-leaderboard.add_score("Alice", 90)
-leaderboard.add_score("Bob", 85)
-leaderboard.add_score("Alice", 95)  # Alice can occupy multiple spots
-leaderboard.add_score("Diana", 88)
-leaderboard.add_score("Eve", 92)
-leaderboard.add_score("Frank", 80)  # Adding more entries will keep only top 5
-leaderboard.add_score("Grace", 98)
+# leaderboard.add_score("Player 1", 0)
+# leaderboard.add_score("Player 2", 0)
+# leaderboard.add_score("Player 3", 0)  # Alice can occupy multiple spots
+# leaderboard.add_score("Player 4", 0)
+# leaderboard.add_score("Allan", 0)
+# leaderboard.add_score("Player 6", 0)  # Adding more entries will keep only top 5
+# leaderboard.add_score("Player 7", 0)
 
 
 

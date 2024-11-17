@@ -1,104 +1,132 @@
-import note, music, menu, track 
+import note, menu, track, json, score
 from score import Score
-from note import Note
-from track import Track
-import numpy as np
+from note import generate_notes_beatmap
+from track import build_tracks, draw_tracks, HIT_ZONE_HEIGHT, HIT_ZONE_Y, BACKGROUND_COLOR
 import pygame
 import sys
 import leaderboard
+import pygame.mixer
 
 pygame.init()
-font = pygame.font.SysFont(None,40)
-#frame rate
+font = pygame.font.SysFont(None, 40)
+
+# Frame rate
 clock = pygame.time.Clock()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 
-
 def create_game():
+    """Create and return the game window."""
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("HackHardware24 - One Column")
+    pygame.display.set_caption("HackHardware24 - Rhythm Game")
     return screen
 
-def start_game():
+def start_game(beatmap_path):
+    """Main game loop with music."""
     global screen
     screen = create_game()
 
-    menu.start_menu()
+    if beatmap_path is None:
+        print("No beatmap selected. Exiting...")
+        pygame.quit()
+        sys.exit()
 
-    tracks = track.draw_track(screen, track.build_tracks())
-    note.build_notes(tracks)
+    # Load the beatmap
+    with open(beatmap_path, 'r') as f:
+        beatmap_data = json.load(f)
+
+    # Debugging output
+    print("Beatmap Data:", beatmap_data)
+
+    # Check for valid structure
+    if not isinstance(beatmap_data, dict) or "audio" not in beatmap_data or "notes" not in beatmap_data:
+        print("Invalid beatmap format. Expected keys: 'audio', 'notes'. Exiting...")
+        pygame.quit()
+        sys.exit()
+
+    # Extract audio file name and notes
+    audio_file = beatmap_data["audio"]
+    notes_data = beatmap_data["notes"]
+
+    print("Beatmap Notes Data:", notes_data)
+
+    # Initialize music
+    audio_path = f"./assets/audio/{audio_file}"
+    pygame.mixer.init()
+    try:
+        pygame.mixer.music.load(audio_path)
+        pygame.mixer.music.play()
+    except pygame.error as e:
+        print(f"Error loading audio file: {e}")
+        pygame.quit()
+        sys.exit()
+
+    # Generate notes from beatmap
+    tracks = build_tracks()
+    notes = generate_notes_beatmap(notes_data, tracks)  # Ensure notes_data is a list of dictionaries
 
     global player_score
     player_score = Score()
 
     running = True
-    start_time = pygame.time.get_ticks()/1000
+    start_time = pygame.time.get_ticks() / 1000
 
     while running:
-        player_score.update_score(screen)
-        dt = clock.get_time() / 1000
-        # if clock.get_time() % 250 == 0:
-            
-        # print('second')
-            # print(note.is_in_score_zone(i))
+        current_time = pygame.time.get_ticks() / 1000 - start_time
+        dt = clock.tick(60) / 1000  # Limit frame rate to 60 FPS
+
+        # Clear screen with background color
+        screen.fill(track.BACKGROUND_COLOR)
+
+        # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
             if event.type == pygame.KEYDOWN:
-                for i in range(note.num_notes): # hard coded here
-                    if event.key == tracks[0].INPUT and note.get_note_track(i) == tracks[0].pos:
-                        #check if note in hit zone
-                        if note.is_in_score_zone(i):
-                            player_score.update_score(screen)
-                            player_score.add_score(1)
-                            note.respawn_note(i)
-                    if event.key == tracks[1].INPUT and note.get_note_track(i) == tracks[1].pos:
-                        #check if note in hit zone
-                        if note.is_in_score_zone(i):
-                            player_score.update_score(screen)
-                            player_score.add_score(1)
-                            note.respawn_note(i)
-                    if event.key == tracks[2].INPUT and note.get_note_track(i) == tracks[2].pos:
-                        #check if note in hit zone
-                        if note.is_in_score_zone(i):
-                            player_score.update_score(screen)
-                            player_score.add_score(1)
-                            note.respawn_note(i)
-                    if event.key == tracks[3].INPUT and note.get_note_track(i) == tracks[3].pos:
-                        #check if note in hit zone
-                        if note.is_in_score_zone(i):
-                            player_score.update_score(screen)
-                            player_score.add_score(1)
-                            note.respawn_note(i)
+                # Check if the pressed key matches a track's input key
+                for track_obj in tracks:
+                    if event.key == track_obj.input_key:
+                        # Check for active notes in the hit zone for this track
+                        for note in notes:
+                            if (
+                                note.active
+                                and note.track_index == track_obj.pos
+                                and note.is_in_score_zone(track.HIT_ZONE_Y, track.HIT_ZONE_HEIGHT)
+                            ):
+                                print("Note hit!")
+                                player_score.add_score(1, screen)
+                                note.active = False  # Deactivate the note
+                                break
 
-        if player_score.score == 3:
-            name = 'Allen'
-            leaderboard.leaderboard.add_score(name,player_score.score)
-            leaderboard.displayLeaderboard()
-                    
+        # Draw tracks
+        draw_tracks(screen, tracks)
 
-        for i in range(note.num_notes):
-            note.update_note_position(i, dt)
+        # Update and display the score
+        player_score.update_score(screen)
 
-            if note.missed_note(i):
-                print("note missed, no score added.")
-                note.respawn_note(i)
-                # note.reset_note(i)
+        # Update and draw notes
+        for note in notes:
+            if note.active and current_time >= note.time:
+                note.update_position(dt)
+                note.draw(screen)
 
-            #update screen
-            
-            note.draw_note(i, screen)
+                if note.missed(track.SCREEN_HEIGHT):
+                    print("Note missed!")
+                    note.active = False
 
-            # player_score.draw_score(screen)
+        # Refresh the display
+        pygame.display.flip()
 
-        pygame.display.update()
-
-        screen.fill(track.BACKGROUND_COLOR)
-        track.draw_track(screen, tracks)
-        clock.tick(60)
-  
+    # Stop music when the game exits
+    pygame.mixer.music.stop()
     pygame.quit()
-    sys.exit()  
+    sys.exit()
 
 if __name__ == "__main__":
-    start_game()
+    selected_beatmap = menu.start_menu()
+    if selected_beatmap:
+        start_game(selected_beatmap)
+    else:
+        print("No beatmap selected.")
+        pygame.quit()
+        sys.exit()
