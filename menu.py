@@ -1,4 +1,4 @@
-import pygame,sys, game2, leaderboard, os
+import pygame,sys, game, leaderboard, os
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -131,17 +131,17 @@ def start_menu():
         if play_button.collidepoint(mouse_pos) and click:
             beatmap_folder = "./assets/beatmaps"
             selected_beatmap = song_selection_menu(beatmap_folder)
-            game2.start_game(selected_beatmap)
+            game.start_game(selected_beatmap)
 
         if leader_button.collidepoint(mouse_pos) and click:
             leaderboard.displayLeaderboard(leaderboard.leaderboard)
 
         if mute_button.collidepoint(mouse_pos) and click:
-            if game2.muted == False:
-                game2.muted = True
+            if game.muted == False:
+                game.muted = True
                 text_data[2] = ("Unmute", mute_button)
             else:
-                game2.muted = False
+                game.muted = False
                 text_data[2] = ("Mute", mute_button)
             print(text_data)
             for button in [play_button, leader_button, mute_button, quit_button]:
@@ -159,7 +159,7 @@ def start_menu():
             
 
         if quit_button.collidepoint(mouse_pos) and click:
-            game2.quit = True
+            game.quit = True
             pygame.quit()
             sys.exit()
 
