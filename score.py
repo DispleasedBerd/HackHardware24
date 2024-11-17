@@ -10,6 +10,7 @@ class Score:
         self.combo = 0
         self.multiplier = 1
         self.player_score = 0
+        self.lives = 10
         self.SCORE_COLOR = (255, 255, 0)
         self.font = pygame.font.SysFont(None,40)
         
@@ -37,6 +38,10 @@ class Score:
     def update_multiplier(self, screen):
         multiplier_text = self.font.render(f"Multiplier: x{self.multiplier}", True, self.SCORE_COLOR)
         screen.blit(multiplier_text, (20,80))
+
+    def update_lives(self, screen):
+        lives_text = self.font.render(f"Lives: {self.lives}", True, self.SCORE_COLOR)
+        screen.blit(lives_text, (20,110))
     
 
     def add_combo(self, screen):
@@ -50,6 +55,8 @@ class Score:
     def reset_combo(self, screen):
         self.combo = 0
         self.multiplier = 1
+        self.lives = self.lives - 1
         self.update_combo(screen)
+        self.update_lives(screen)
 
 
