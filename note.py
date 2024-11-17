@@ -64,7 +64,9 @@ class Note:
         if hit_zone_y is None or hit_zone_height is None:
             print("Error: hit_zone_y or hit_zone_height not provided")
             return False
-        return hit_zone_y - self.radius <= self.y <= hit_zone_y + hit_zone_height
+        return (
+        hit_zone_y - self.radius - 10 <= self.y <= hit_zone_y + hit_zone_height + 10
+        )
 
     def missed(self, screen_height):
         """Check if the note has moved off the screen."""
