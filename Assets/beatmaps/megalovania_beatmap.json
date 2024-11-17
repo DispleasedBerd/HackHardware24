@@ -1,4 +1,6 @@
-[
+{
+    "audio": "megalovania.mp3",
+    "notes": [
     {
         "time": 0.18575963718820862,
         "track": 1
@@ -2496,3 +2498,4 @@
         "track": 1
     }
 ]
+}
