@@ -86,10 +86,10 @@ def start_game(beatmap_path):
                             player_score.add_combo(screen)
                             note.respawn_note(i)
 
-        # if player_score.score == 3:
-        #     name = 'Allen'
-        #     leaderboard.leaderboard.add_score(name,player_score.score)
-        #     leaderboard.displayLeaderboard()
+        if player_score.score == 5: # game over condition
+            name = 'Allen' # player name
+            leaderboard.leaderboard.add_score(name,player_score.player_score)
+            leaderboard.displayLeaderboard()
                     
 
         for i in range(note.num_notes):
