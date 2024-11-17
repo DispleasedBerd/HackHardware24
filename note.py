@@ -60,9 +60,13 @@ class Note:
         if self.active:
             pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
 
-    def is_in_score_zone(self):
-        """Check if the note is in the hit zone."""
-        return track.HIT_ZONE_Y - self.radius <= self.y <= track.HIT_ZONE_Y + track.HIT_ZONE_HEIGHT
+    def is_in_score_zone(self, hit_zone_y=None, hit_zone_height=None):
+        if hit_zone_y is None or hit_zone_height is None:
+            print("Error: hit_zone_y or hit_zone_height not provided")
+            return False
+        return (
+        hit_zone_y - self.radius - 10 <= self.y <= hit_zone_y + hit_zone_height + 10
+        )
 
     def missed(self, screen_height):
         """Check if the note has moved off the screen."""

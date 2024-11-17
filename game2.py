@@ -84,6 +84,21 @@ def start_game(beatmap_path):
         #     if event.type == pygame.QUIT:
         #         running = False
 
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                # Check if the pressed key matches a track's input key
+                for track_obj in tracks:
+                    if event.key == track_obj.input_key:
+                        # Check for active notes in the hit zone for this track
+                        for note in notes:
+                            if (
+                                note.active
+                                and note.track_index == track_obj.pos
+                                and note.is_in_score_zone(track.HIT_ZONE_Y, track.HIT_ZONE_HEIGHT)
+                            ):
+                                print("Note hit!")
+                                player_score.add_score(1, note, screen)
+                                break
         #     if event.type == pygame.KEYDOWN:
         #         # Check if the pressed key matches a track's input key
         #         for track_obj in tracks:
@@ -118,6 +133,7 @@ def start_game(beatmap_path):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
             if event.type == pygame.KEYDOWN:
                 # print(f"KEYDOWN: {pygame.key.name(event.key)}")
                 for note in notes:
