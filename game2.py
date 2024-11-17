@@ -1,126 +1,82 @@
-import note, music, menu, track, json, score
+import note, menu, track, json, score
 from score import Score
-from note import Note
-from track import Track
-import numpy as np
+from note import Note, generate_notes_beatmap
+from track import build_tracks, draw_tracks
 import pygame
 import sys
 import leaderboard
 
 pygame.init()
-font = pygame.font.SysFont(None,40)
-#frame rate
+font = pygame.font.SysFont(None, 40)
+
+# Frame rate
 clock = pygame.time.Clock()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 
 
 def create_game():
+    """Create and return the game window."""
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("HackHardware24 - One Column")
+    pygame.display.set_caption("HackHardware24 - Rhythm Game")
     return screen
 
+
 def start_game(beatmap_path):
+    """Main game loop."""
     global screen
     screen = create_game()
 
     if beatmap_path is None:
-        print("no beatmap selected. exiting")
+        print("No beatmap selected. Exiting...")
         pygame.quit()
         sys.exit()
 
+    # Load the beatmap
     with open(beatmap_path, 'r') as f:
         beatmap_data = json.load(f)
     print(f"Loaded beatmap: {beatmap_path}")
 
-    tracks = track.draw_track(screen, track.build_tracks())
-    note.build_notes(tracks)
+    # Build tracks and generate notes
+    tracks = build_tracks()
+    notes = generate_notes_beatmap(beatmap_data, tracks)
 
     global player_score
     player_score = Score()
 
-    tracks = track.draw_track(screen, track.build_tracks())
-    note.build_notes(tracks)
-
     running = True
-    start_time = pygame.time.get_ticks()/1000
+    start_time = pygame.time.get_ticks() / 1000
 
     while running:
+        current_time = pygame.time.get_ticks() / 1000 - start_time
+        screen.fill(track.BACKGROUND_COLOR)
+
+        # Draw tracks
+        draw_tracks(screen, tracks)
+
         player_score.update_score(screen)
-        player_score.update_combo(screen)
-        player_score.update_multiplier(screen)
+
         dt = clock.get_time() / 1000
-        # if clock.get_time() % 250 == 0:
-            
-        # print('second')
-            # print(note.is_in_score_zone(i))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                for i in range(note.num_notes): # hard coded here
-                    if event.key == tracks[0].INPUT and note.get_note_track(i) == tracks[0].pos:
-                        #check if note in hit zone
-                        if note.is_in_score_zone(i):
-                            player_score.add_score(player_score.calculate_score(i), screen)
-                            player_score.add_combo(screen)
-                            note.respawn_note(i)
-                            
-                    if event.key == tracks[1].INPUT and note.get_note_track(i) == tracks[1].pos:
-                        #check if note in hit zone
-                        if note.is_in_score_zone(i):
-                            player_score.add_score(player_score.calculate_score(i), screen)
-                            player_score.add_combo(screen)
-                            note.respawn_note(i)
 
-                    if event.key == tracks[2].INPUT and note.get_note_track(i) == tracks[2].pos:
-                        #check if note in hit zone
-                        if note.is_in_score_zone(i):
-                            player_score.add_score(player_score.calculate_score(i), screen)
-                            player_score.add_combo(screen)
-                            note.respawn_note(i)
+        for note in notes:
+            if note.active and current_time >= note.time:
+                note.update_position(dt)
+                note.draw(screen)
 
-                    if event.key == tracks[3].INPUT and note.get_note_track(i) == tracks[3].pos:
-                        #check if note in hit zone
-                        if note.is_in_score_zone(i):
-                            player_score.add_score(player_score.calculate_score(i), screen)
-                            player_score.add_combo(screen)
-                            note.respawn_note(i)
-
-        if player_score.score == 5: # game over condition
-            name = 'Allen' # player name
-            leaderboard.leaderboard.add_score(name,player_score.player_score)
-            leaderboard.displayLeaderboard()
-                    
-
-        for i in range(note.num_notes):
-            note.update_note_position(i, dt)
-
-            if note.missed_note(i):
-                print("note missed, no score added.")
-                note.respawn_note(i)
-                player_score.reset_combo(screen)
-                # note.reset_note(i)
-
-            #update screen
-            
-            note.draw_note(i, screen)
-
-            # player_score.draw_score(screen)
+                if note.missed(SCREEN_HEIGHT):
+                    note.active = False 
 
         pygame.display.update()
-
-        screen.fill(track.BACKGROUND_COLOR)
-        track.draw_track(screen, tracks)
         clock.tick(60)
-  
+
     pygame.quit()
-    sys.exit()  
+    sys.exit()
+
 
 if __name__ == "__main__":
     selected_beatmap = menu.start_menu()
     if selected_beatmap:
         start_game(selected_beatmap)
     else:
-        print("no beatmap selected..")
+        print("No beatmap selected.")
         pygame.quit()
         sys.exit()
