@@ -69,13 +69,6 @@ def missed_note(i):
     else:
         False
 
-def calculate_score(i):    
-    center = track.hit_zone_y+track.hit_zone_height/2
-    max_score = 100
-    distance = abs(note_y[i]-center)
-    score = (track.hit_zone_height/2) // (distance+1) + 1
-    return score
-
 class Note:
     def __init__(self, Track): # include track here for the track it is on
         self.NOTE_COLOR = NOTE_COLOR

@@ -1,4 +1,4 @@
-import note, music, menu, track 
+import note, music, menu, track, score
 from score import Score
 from note import Note
 from track import Track
@@ -36,6 +36,8 @@ def start_game():
 
     while running:
         player_score.update_score(screen)
+        player_score.update_combo(screen)
+        player_score.update_multiplier(screen)
         dt = clock.get_time() / 1000
         # if clock.get_time() % 250 == 0:
             
@@ -49,32 +51,35 @@ def start_game():
                     if event.key == tracks[0].INPUT and note.get_note_track(i) == tracks[0].pos:
                         #check if note in hit zone
                         if note.is_in_score_zone(i):
-                            player_score.update_score(screen)
-                            player_score.add_score(note.calculate_score(i))
+                            player_score.add_score(player_score.calculate_score(i), screen)
+                            player_score.add_combo(screen)
                             note.respawn_note(i)
+                            
                     if event.key == tracks[1].INPUT and note.get_note_track(i) == tracks[1].pos:
                         #check if note in hit zone
                         if note.is_in_score_zone(i):
-                            player_score.update_score(screen)
-                            player_score.add_score(note.calculate_score(i))
+                            player_score.add_score(player_score.calculate_score(i), screen)
+                            player_score.add_combo(screen)
                             note.respawn_note(i)
+
                     if event.key == tracks[2].INPUT and note.get_note_track(i) == tracks[2].pos:
                         #check if note in hit zone
                         if note.is_in_score_zone(i):
-                            player_score.update_score(screen)
-                            player_score.add_score(note.calculate_score(i))
+                            player_score.add_score(player_score.calculate_score(i), screen)
+                            player_score.add_combo(screen)
                             note.respawn_note(i)
+
                     if event.key == tracks[3].INPUT and note.get_note_track(i) == tracks[3].pos:
                         #check if note in hit zone
                         if note.is_in_score_zone(i):
-                            player_score.update_score(screen)
-                            player_score.add_score(note.calculate_score(i))
+                            player_score.add_score(player_score.calculate_score(i), screen)
+                            player_score.add_combo(screen)
                             note.respawn_note(i)
 
-        if player_score.score == 3:
-            name = 'Allen'
-            leaderboard.leaderboard.add_score(name,player_score.score)
-            leaderboard.displayLeaderboard()
+        # if player_score.score == 3:
+        #     name = 'Allen'
+        #     leaderboard.leaderboard.add_score(name,player_score.score)
+        #     leaderboard.displayLeaderboard()
                     
 
         for i in range(note.num_notes):
@@ -83,6 +88,7 @@ def start_game():
             if note.missed_note(i):
                 print("note missed, no score added.")
                 note.respawn_note(i)
+                player_score.reset_combo(screen)
                 # note.reset_note(i)
 
             #update screen
