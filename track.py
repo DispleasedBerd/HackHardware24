@@ -13,10 +13,10 @@ BACKGROUND_COLOR = (30, 30, 30)
 TRACK_POSITIONS = ["LEFT", "DOWN", "UP", "RIGHT"]
 TRACK_X = {"LEFT": CENTER - 215, "DOWN": CENTER - 105, "UP": CENTER + 5, "RIGHT": CENTER + 115}
 INPUT = {
-    "LEFT": pygame.K_LEFT,
-    "DOWN": pygame.K_DOWN,
-    "UP": pygame.K_UP,
-    "RIGHT": pygame.K_RIGHT,
+    "LEFT": pygame.K_a,
+    "DOWN": pygame.K_s,
+    "UP": pygame.K_k,
+    "RIGHT": pygame.K_l,
 }
 
 # Hit zone properties
