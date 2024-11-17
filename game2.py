@@ -91,7 +91,7 @@ def start_game(beatmap_path):
                             if (
                                 note.active
                                 and note.track_index == track_obj.pos
-                                and note.is_in_score_zone(track.HIT_ZONE_Y, track.HIT_ZONE_HEIGHT)
+                                and note.is_in_score_zone(HIT_ZONE_Y, HIT_ZONE_HEIGHT)
                             ):
                                 print("Note hit!")
                                 player_score.add_score(1, screen)
