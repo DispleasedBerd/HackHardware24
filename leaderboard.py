@@ -20,7 +20,7 @@ def displayLeaderboard():
 
         click = False
 
-        LeaderRect = pygame.Rect(screen.get_width()//2 - menuText.get_width() //2 ,screen.get_height()//6 - menuText.get_height() // 2, menuText.get_width(),menuText.get_height())
+        # LeaderRect = pygame.Rect(screen.get_width()//2 - menuText.get_width() //2 ,screen.get_height()//6 - menuText.get_height() // 2, menuText.get_width(),menuText.get_height())
 
         #pygame.draw.rect(screen, (255, 0, 0), LeaderRect)
 
@@ -52,19 +52,15 @@ def displayLeaderboard():
             pygame.draw.rect(screen,color,pygame.Rect(400,50,480,620),2,3)
 
 
-            backButton = pygame.Rect((50,600,200,50))
-            pygame.draw.rect(screen, (255,255,255), backButton,2,3)
-            backText = fontSmall.render("back", True, (255, 255, 255))
-            if backButton.collidepoint(mousePos):
-                pygame.draw.rect(screen, (100, 100, 100), backButton, 2,3)  # Highlight Quit Button
-                backText = fontSmall.render("back", True, (100, 100, 100))
+        backButton = pygame.Rect((50,600,200,50))
+        pygame.draw.rect(screen, (255,255,255), backButton,2,3)
+        backText = fontSmall.render("back", True, (255, 255, 255))
+        if backButton.collidepoint(mousePos):
+            pygame.draw.rect(screen, (100, 100, 100), backButton, 2,3)  # Highlight Quit Button
+            backText = fontSmall.render("back", True, (100, 100, 100))
 
-            screen.blit(backText, (backButton.x + (backButton.width - backText.get_width()) // 2,
-                            backButton.y + (backButton.height - backText.get_height()) // 2))
-
-
-
-
+        screen.blit(backText, (backButton.x + (backButton.width - backText.get_width()) // 2,
+                        backButton.y + (backButton.height - backText.get_height()) // 2))
 
 
 
@@ -98,13 +94,13 @@ class Leaderboard:
     def add_score(self, name, score):
         # Add a new entry for the player's score
         self.leaderboard.append({"name": name, "score": score})
-        leaderboard.add_score("Player 1", 0)
-        leaderboard.add_score("Player 2", 0)
-        leaderboard.add_score("Player 3", 0)  # Alice can occupy multiple spots
-        leaderboard.add_score("Player 4", 0)
-        leaderboard.add_score("Allan", 0)
-        leaderboard.add_score("Player 6", 0)  # Adding more entries will keep only top 5
-        leaderboard.add_score("Player 7", 0)
+        # leaderboard.add_score("Player 1", 0)
+        # leaderboard.add_score("Player 2", 0)
+        # leaderboard.add_score("Player 3", 0)  # Alice can occupy multiple spots
+        # leaderboard.add_score("Player 4", 0)
+        # leaderboard.add_score("Allan", 0)
+        # leaderboard.add_score("Player 6", 0)  # Adding more entries will keep only top 5
+        # leaderboard.add_score("Player 7", 0)
 
         # Sort the leaderboard by score in descending order and keep only top 5 entries
         self.leaderboard = sorted(self.leaderboard, key=lambda entry: entry["score"], reverse=True)[:5]
@@ -116,13 +112,13 @@ class Leaderboard:
 
 # Usage
 leaderboard = Leaderboard()
-# leaderboard.add_score("Player 1", 0)
-# leaderboard.add_score("Player 2", 0)
-# leaderboard.add_score("Player 3", 0)  # Alice can occupy multiple spots
-# leaderboard.add_score("Player 4", 0)
-# leaderboard.add_score("Allan", 0)
-# leaderboard.add_score("Player 6", 0)  # Adding more entries will keep only top 5
-# leaderboard.add_score("Player 7", 0)
+leaderboard.add_score("Player 1", 0)
+leaderboard.add_score("Player 2", 0)
+leaderboard.add_score("Player 3", 0)  # Alice can occupy multiple spots
+leaderboard.add_score("Player 4", 0)
+leaderboard.add_score("Allan", 0)
+leaderboard.add_score("Player 6", 0)  # Adding more entries will keep only top 5
+leaderboard.add_score("Player 7", 0)
 
 
 
