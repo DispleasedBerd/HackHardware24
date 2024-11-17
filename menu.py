@@ -101,16 +101,16 @@ def start_menu():
         if play_button.collidepoint(mouse_pos) and click:
             beatmap_folder = "./assets/beatmaps"
             selected_beatmap = song_selection_menu(beatmap_folder)
-            return selected_beatmap  # Return beatmap path to start the game
+            game2.start_game(selected_beatmap)
 
         if leader_button.collidepoint(mouse_pos) and click:
-            leaderboard.displayLeaderboard()
+            leaderboard.displayLeaderboard(leaderboard.leaderboard)
 
         if settings_button.collidepoint(mouse_pos) and click:
             print("Settings")
 
         if quit_button.collidepoint(mouse_pos) and click:
+            game2.quit = True
             pygame.quit()
             sys.exit()
 
-    return None

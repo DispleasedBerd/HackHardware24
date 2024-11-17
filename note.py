@@ -9,29 +9,6 @@ TRACK_POSITIONS = ["LEFT", "DOWN", "UP", "RIGHT"]
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 
-def find_closest(notes):
-    heap1 = []
-    heap2 = []
-    heap3 = []
-    heap4 = []
-    closest = {TRACK_POSITIONS[0]: heap1,
-                TRACK_POSITIONS[1]: heap2,
-                TRACK_POSITIONS[2]: heap3,
-                TRACK_POSITIONS[3]: heap4
-                }
-    for note in notes:
-        height = SCREEN_HEIGHT-note.y
-        if note.track_index == TRACK_POSITIONS[0]:
-            hq.heappush(closest[TRACK_POSITIONS[0]], height)
-        elif note.track_index == TRACK_POSITIONS[1]:
-            hq.heappush(closest[TRACK_POSITIONS[1]], height)
-        elif note.track_index == TRACK_POSITIONS[2]:
-            hq.heappush(closest[TRACK_POSITIONS[2]], height)
-        elif note.track_index == TRACK_POSITIONS[3]:
-            hq.heappush(closest[TRACK_POSITIONS[3]], height)
-        
-    return closest
-
 class Note:
 
     def __init__(self, track, time, note_speed=NOTE_SPEED):
@@ -60,12 +37,12 @@ class Note:
         if self.active:
             pygame.draw.circle(screen, self.color, (int(self.x), int(self.y)), self.radius)
 
-    def is_in_score_zone(self, hit_zone_y=None, hit_zone_height=None):
-        if hit_zone_y is None or hit_zone_height is None:
+    def is_in_score_zone(self):
+        if track.HIT_ZONE_Y is None or track.HIT_ZONE_HEIGHT is None:
             print("Error: hit_zone_y or hit_zone_height not provided")
             return False
         return (
-        hit_zone_y - self.radius - 10 <= self.y <= hit_zone_y + hit_zone_height + 10
+        track.HIT_ZONE_Y - self.radius - 10 <= self.y <= track.HIT_ZONE_Y + track.HIT_ZONE_HEIGHT + 10
         )
 
     def missed(self, screen_height):

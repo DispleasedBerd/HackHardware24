@@ -16,7 +16,7 @@ class Score:
         
     def calculate_score(self, note):    
         center = track.HIT_ZONE_Y+track.HIT_ZONE_HEIGHT/2
-        max_score = 100
+        #max_score = 100
         distance = abs(note.y-center)
         score = self.multiplier*((track.HIT_ZONE_HEIGHT/2) // (distance+1) + 1)
         return score

@@ -1,7 +1,9 @@
 # Leaderboard implementation allowing one player to occupy multiple spots
 import pygame,sys,menu
 
-def displayLeaderboard():
+
+
+def displayLeaderboard(leaderboard):
 
     pygame.init()
     screen = pygame.display.set_mode((1280, 720))
@@ -35,10 +37,10 @@ def displayLeaderboard():
             score = entry['score']
             nameText = fontSmall.render(f'{name}',True,(0,0,0))
             scoreText = fontSmall.render(f'{score}',True,(0,0,0))
-            rankText = fontSmall.render(f'{rank}. ',True,(0,0,0))
-            screen.blit(nameText, (screen.get_width() // 2 - nameText.get_width() // 2 - 80, 100+100*rank))
-            screen.blit(scoreText,(screen.get_width() // 2 - scoreText.get_width() // 2 + 120, 100+100*rank))
-            screen.blit(rankText,(480, 100+100*rank))
+            # rankText = fontSmall.render(f'{rank}. ',True,(0,0,0))
+            # screen.blit(nameText, (screen.get_width() // 2 - nameText.get_width() // 2 - 80, 100+100*rank))
+            # screen.blit(scoreText,(screen.get_width() // 2 - scoreText.get_width() // 2 + 120, 100+100*rank))
+            # screen.blit(rankText,(480, 100+100*rank))
 
             nameGlow = fontGlow.render(f'{name}',True,(255,255,255))
             scoreGlow = fontGlow.render(f'{score}',True,(255,255,255))
@@ -90,6 +92,7 @@ class Leaderboard:
 
     def __init__(self):
         self.leaderboard = []  # List to store player-score pairs
+        self.players = 0
 
     def add_score(self, name, score):
         # Add a new entry for the player's score
@@ -111,14 +114,17 @@ class Leaderboard:
             print(f"{rank}. {entry['name']}: {entry['score']}")
 
 # Usage
+# leaderboard = Leaderboard()
+# leaderboard.add_score("Player 1", 0)
+# leaderboard.add_score("Player 2", 0)
+# leaderboard.add_score("Player 3", 0)  # Alice can occupy multiple spots
+# leaderboard.add_score("Player 4", 0)
+# leaderboard.add_score("Allan", 0)
+# leaderboard.add_score("Player 6", 0)  # Adding more entries will keep only top 5
+# leaderboard.add_score("Player 7", 0)
+
+
 leaderboard = Leaderboard()
-leaderboard.add_score("Player 1", 0)
-leaderboard.add_score("Player 2", 0)
-leaderboard.add_score("Player 3", 0)  # Alice can occupy multiple spots
-leaderboard.add_score("Player 4", 0)
-leaderboard.add_score("Allan", 0)
-leaderboard.add_score("Player 6", 0)  # Adding more entries will keep only top 5
-leaderboard.add_score("Player 7", 0)
 
 
 
@@ -130,62 +136,3 @@ leaderboard.add_score("Player 7", 0)
 
 
 
-
-
-
-
-
-
-# import heapq as hq
-# scores = {"Player 1": 0, "Player 2": 0, "Player 3": 0, "Player 4": 0, "Player 5": 0}
-
-# def add_score(playerId, score):
-#     global scores
-#     if scores[playerId] > -score:
-#         scores[playerId] = -score
-
-#     heap = []
-#     for i in scores.values():
-#         heap.append(i)
-#     hq.heapify(heap)   
-#     print('heapify',heap)
-#     new_dict=[]
-#     for i in range(0,len(heap)):
-     
-#     # Iterating the oringinal dictionary
-#         for k,v in scores.items():
-        
-#             if v==heap[i] and (k,v) not in new_dict:
-#                 new_dict.append((k,v))
-    
-#     scores = dict(new_dict)
-#     print(scores)
-
-
-# def top(K):
-#     heap = []
-
-#     for score in scores.values():
-#         if len(heap) < K:
-#             hq.heappush(heap,score)
-#         else:
-#             if score < heap[0]:
-#                 hq.heappop(heap)
-#                 hq.heappush(heap, score)
-
-#     res = 0
-
-#     for num in heap:
-#         res += num
-        
-#     return res
-
-            
-# def reset(playerId):
-#     scores[playerId] = [0]
-
-# if __name__ == "__main__":
-#     add_score("Player 1", 1)
-#     add_score("Player 2", 5)
-#     add_score("Player 3", 2)
-    

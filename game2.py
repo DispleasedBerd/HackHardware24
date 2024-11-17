@@ -1,4 +1,4 @@
-import menu, track, json, score
+import menu, track, json, score, gameOver, beatmap
 import note as nt
 import heapq as hq
 from score import Score
@@ -79,42 +79,6 @@ def start_game(beatmap_path):
         # Clear screen with background color
         screen.fill(track.BACKGROUND_COLOR)
 
-        # Event handling
-        # for event in pygame.event.get():
-        #     if event.type == pygame.QUIT:
-        #         running = False
-
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                # Check if the pressed key matches a track's input key
-                for track_obj in tracks:
-                    if event.key == track_obj.input_key:
-                        # Check for active notes in the hit zone for this track
-                        for note in notes:
-                            if (
-                                note.active
-                                and note.track_index == track_obj.pos
-                                and note.is_in_score_zone(track.HIT_ZONE_Y, track.HIT_ZONE_HEIGHT)
-                            ):
-                                print("Note hit!")
-                                player_score.add_score(1, note, screen)
-                                break
-        #     if event.type == pygame.KEYDOWN:
-        #         # Check if the pressed key matches a track's input key
-        #         for track_obj in tracks:
-        #             if event.key == track_obj.input_key:
-        #                 # Check for active notes in the hit zone for this track
-        #                 for note in notes:
-        #                     if (
-        #                         note.active
-        #                         and note.track_index == track_obj.pos
-        #                         and note.is_in_score_zone(track.HIT_ZONE_Y, track.HIT_ZONE_HEIGHT)
-        #                     ):
-        #                         print("Note hit!")
-        #                         player_score.add_score(1, screen)
-        #                         note.active = False  # Deactivate the note
-        #                         break
-
         # Draw tracks
         draw_tracks(screen, tracks)
 
@@ -127,24 +91,22 @@ def start_game(beatmap_path):
 
         dt = clock.get_time() / 1000
 
-        # Initialize a dictionary to track the pressed state of keys
-        key_states = {track.input_key: False for track in tracks}
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
             if event.type == pygame.KEYDOWN:
-                # print(f"KEYDOWN: {pygame.key.name(event.key)}")
                 for note in notes:
+                    print()
                     if event.key == tracks[0].input_key and note.track_index == tracks[0].pos:
+                        print("1")
                         #check if note in hit zone
                         # print(closest[tracks[0].pos][0])
                         if note.is_in_score_zone():
-                            print("Note hit in zone")
                             player_score.add_score(player_score.calculate_score(note), note, screen)
                             player_score.add_combo(screen)
                     elif event.key == tracks[1].input_key and note.track_index == tracks[1].pos:
+                        print("2")
                         #check if note in hit zone
                         if note.is_in_score_zone():
                             player_score.add_score(player_score.calculate_score(note), note, screen)
@@ -167,11 +129,11 @@ def start_game(beatmap_path):
 
                 if note.missed(SCREEN_HEIGHT):
                     note.active = False 
-                    # print("before",closest[note.track_index])
-                    # print("after",closest[note.track_index])
                     player_score.reset_combo(screen)
-                    if player_score.lives <= 0:
-                        leaderboard.displayLeaderboard()
+                    pygame.display.flip()
+                    if player_score.lives <= 7:
+                        gameOver.displayGameOver(screen, player_score)
+                        # pygame.time.delay(60000)
 
 
         # Refresh the display
@@ -183,10 +145,6 @@ def start_game(beatmap_path):
     sys.exit()
 
 if __name__ == "__main__":
-    selected_beatmap = menu.start_menu()
-    if selected_beatmap:
-        start_game(selected_beatmap)
-    else:
-        print("No beatmap selected.")
-        pygame.quit()
-        sys.exit()
+    #selected_beatmap = menu.start_menu()
+    menu.start_menu()
+    
