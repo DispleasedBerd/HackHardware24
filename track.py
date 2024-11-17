@@ -12,6 +12,7 @@ HIT_ZONE_COLOR = (255, 0, 0)
 BACKGROUND_COLOR = (30, 30, 30)
 TRACK_POSITIONS = ["LEFT", "DOWN", "UP", "RIGHT"]
 TRACK_X = {"LEFT": CENTER - 215, "DOWN": CENTER - 105, "UP": CENTER + 5, "RIGHT": CENTER + 115}
+TRACK_SHIFT = {"LEFT": 20, "DOWN": 5 , "UP": 30, "RIGHT": 5}
 INPUT = {
     "LEFT": pygame.K_LEFT,
     "DOWN": pygame.K_DOWN,
@@ -37,11 +38,13 @@ class Track:
         self.pos = pos
         self.x = TRACK_X[self.pos]
         self.input_key = input_key
+        self.shift = TRACK_SHIFT[self.pos]
 
     def draw(self, screen):
         """Draw the track and its hit zone."""
         # Draw the track
         pygame.draw.rect(screen, self.color, (self.x, 0, self.width, self.height))
+
         # Draw the hit zone
         pygame.draw.rect(
             screen,
@@ -63,5 +66,9 @@ def build_tracks():
 
 def draw_tracks(screen, tracks):
     """Draw all tracks on the screen."""
+    pygame.font.init()
+    font = pygame.font.SysFont(None,40)
     for track in tracks:
         track.draw(screen)
+        trackText = font.render(track.pos, False, (255, 255, 0))
+        screen.blit(trackText, (track.x+track.shift, HIT_ZONE_Y+50))
