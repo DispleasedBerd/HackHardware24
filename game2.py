@@ -1,4 +1,4 @@
-import note, music, menu, track, score
+import note, music, menu, track, json, score
 from score import Score
 from note import Note
 from track import Track
@@ -19,17 +19,27 @@ def create_game():
     pygame.display.set_caption("HackHardware24 - One Column")
     return screen
 
-def start_game():
+def start_game(beatmap_path):
     global screen
     screen = create_game()
 
-    menu.start_menu()
+    if beatmap_path is None:
+        print("no beatmap selected. exiting")
+        pygame.quit()
+        sys.exit()
+
+    with open(beatmap_path, 'r') as f:
+        beatmap_data = json.load(f)
+    print(f"Loaded beatmap: {beatmap_path}")
 
     tracks = track.draw_track(screen, track.build_tracks())
     note.build_notes(tracks)
 
     global player_score
     player_score = Score()
+
+    tracks = track.draw_track(screen, track.build_tracks())
+    note.build_notes(tracks)
 
     running = True
     start_time = pygame.time.get_ticks()/1000
@@ -107,4 +117,10 @@ def start_game():
     sys.exit()  
 
 if __name__ == "__main__":
-    start_game()
+    selected_beatmap = menu.start_menu()
+    if selected_beatmap:
+        start_game(selected_beatmap)
+    else:
+        print("no beatmap selected..")
+        pygame.quit()
+        sys.exit()
