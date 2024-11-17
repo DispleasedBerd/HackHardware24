@@ -65,18 +65,47 @@ def start_menu():
         settings_button = pygame.Rect(50, 450, 200, 50)
         quit_button = pygame.Rect(50, 600, 200, 50)
 
-        # Draw buttons
-        pygame.draw.rect(screen, (255, 0, 0), play_button)
-        pygame.draw.rect(screen, (255, 0, 0), leader_button)
-        pygame.draw.rect(screen, (255, 0, 0), settings_button)
-        pygame.draw.rect(screen, (255, 0, 0), quit_button)
+        for button in [play_button, leader_button, settings_button, quit_button]:
+            shadow = button.copy()
+            shadow.x += 1
+            shadow.y += 1
+            pygame.draw.rect(screen, (50,50,50), shadow, border_radius = 20)
+            pygame.draw.rect(screen, (250,0,0), button, border_radius = 20)
 
+        if play_button.collidepoint(mouse_pos):
+            pygame.draw.rect(screen, (255,50,50), play_button, border_radius = 20)
+
+        # Draw buttons
+        #pygame.draw.rect(screen, (255, 0, 0), play_button)
+        #pygame.draw.rect(screen, (255, 0, 0), leader_button)
+        #pygame.draw.rect(screen, (255, 0, 0), settings_button)
+        #pygame.draw.rect(screen, (255, 0, 0), quit_button)
+
+        text_data = [
+            ("Play", play_button),
+            ("Leaderboard", leader_button),
+            ("Settings", settings_button),
+            ("Quit", quit_button),
+        ]
+        for text, button in text_data:
+            shadow_text = font.render(text, True, (50, 50, 50))  # Shadow color
+            main_text = font.render(text, True, (255, 255, 255))  # Main text color
+
+            shadow_x = button.x + (button.width - shadow_text.get_width()) // 2 + 2  # Slight offset for shadow
+            shadow_y = button.y + (button.height - shadow_text.get_height()) // 2 + 2
+
+            main_x = button.x + (button.width - main_text.get_width()) // 2
+            main_y = button.y + (button.height - main_text.get_height()) // 2
+
+            screen.blit(shadow_text, (shadow_x, shadow_y))
+            screen.blit(main_text, (main_x, main_y))
+        """
         # Render text
         play_text = font.render("Play", True, (255, 255, 255))
         leader_text = font.render("Leaderboard", True, (255, 255, 255))
         settings_text = font.render("Settings", True, (255, 255, 255))
         quit_text = font.render("Quit", True, (255, 255, 255))
-
+        
         screen.blit(play_text, (play_button.x + (play_button.width - play_text.get_width()) // 2,
                                 play_button.y + (play_button.height - play_text.get_height()) // 2))
         screen.blit(leader_text, (leader_button.x + (leader_button.width - leader_text.get_width()) // 2,
@@ -85,6 +114,13 @@ def start_menu():
                                     settings_button.y + (settings_button.height - settings_text.get_height()) // 2))
         screen.blit(quit_text, (quit_button.x + (quit_button.width - quit_text.get_width()) // 2,
                                 quit_button.y + (quit_button.height - quit_text.get_height()) // 2))
+        """
+        #game title
+        title_font = pygame.font.SysFont(None, 80)
+        title_text = title_font.render("BeatMaxx", True, (255,255,255))
+        title_x = screen.get_width() - title_text.get_width() - 50
+        title_y = (screen.get_height() // 2) - (title_text.get_height() // 2)
+        screen.blit(title_text,(title_x, title_y))
 
         pygame.display.update()
         clock.tick(60)
