@@ -122,7 +122,7 @@ def start_game(beatmap_path):
         player_score.update_score(screen)
         player_score.update_combo(screen)
         player_score.update_multiplier(screen)
-        closest = nt.find_closest(notes)
+        # closest = nt.find_closest(notes)
 
         dt = clock.get_time() / 1000
 
@@ -134,6 +134,7 @@ def start_game(beatmap_path):
                 running = False
 
             if event.type == pygame.KEYDOWN:
+
                 for track_obj in tracks:
                     if event.key == track_obj.input_key:
                         closest_note = None
@@ -176,7 +177,6 @@ def start_game(beatmap_path):
             if event.type == pygame.KEYUP:
                 print(f"KEYUP: {pygame.key.name(event.key)}")
             
-        
 
         for note in notes:
             if note.active and current_time >= note.time:
@@ -186,7 +186,6 @@ def start_game(beatmap_path):
                 if note.missed(SCREEN_HEIGHT):
                     note.active = False 
                     # print("before",closest[note.track_index])
-                    hq.heappop(closest[note.track_index])
                     # print("after",closest[note.track_index])
                     player_score.reset_combo(screen)
 
