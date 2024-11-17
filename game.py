@@ -35,8 +35,6 @@ def start_game(beatmap_path):
     with open(beatmap_path, 'r') as f:
         beatmap_data = json.load(f)
 
-    # Debugging output
-    print("Beatmap Data:", beatmap_data)
 
     # Check for valid structure
     if not isinstance(beatmap_data, dict) or "audio" not in beatmap_data or "notes" not in beatmap_data:
@@ -47,8 +45,6 @@ def start_game(beatmap_path):
     # Extract audio file name and notes
     audio_file = beatmap_data["audio"]
     notes_data = beatmap_data["notes"]
-
-    print("Beatmap Notes Data:", notes_data)
 
     # Initialize music
     audio_path = f"./assets/audio/{audio_file}"
@@ -129,7 +125,6 @@ def start_game(beatmap_path):
                 note.draw(screen)
 
                 if note.missed(SCREEN_HEIGHT):
-                    print(f"Note missed at y={note.y}, lives reduced to {player_score.lives}")
                     note.active = False 
                     player_score.reset_combo(screen)
                     if player_score.lives <= 0:

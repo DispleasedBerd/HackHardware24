@@ -1,4 +1,4 @@
-import pygame, menu, leaderboard
+import pygame, menu, leaderboard, music
 import note
 
 fontSmall = pygame.font.Font(None,40)
@@ -11,6 +11,7 @@ def displayGameOver(screen, player_score):
     pygame.init()
     leaderboard.leaderboard.players = leaderboard.leaderboard.players + 1
     leaderboard.leaderboard.add_score(f"Player {leaderboard.leaderboard.players}", player_score.player_score)
+   
 
     click = False
     running = True
@@ -69,6 +70,7 @@ def displayGameOver(screen, player_score):
         
         if backButton.collidepoint(mousePos):
             if click:
+                pygame.mixer.music.stop()
                 menu.start_menu()
                 click = False
         

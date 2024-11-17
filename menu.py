@@ -83,6 +83,8 @@ def start_menu():
             ("Mute", mute_button),
             ("Quit", quit_button),
         ]
+    if game.muted:
+        text_data[2] = ("Unmute", mute_button)
     while running:
         screen.blit(skibidi, (0, 0))
 
@@ -143,7 +145,7 @@ def start_menu():
             else:
                 game.muted = False
                 text_data[2] = ("Mute", mute_button)
-            print(text_data)
+            # print(text_data)
             for button in [play_button, leader_button, mute_button, quit_button]:
                 shadow = button.copy()
                 shadow.x += 1

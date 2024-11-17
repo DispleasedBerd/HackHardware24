@@ -65,7 +65,7 @@ def generate_notes_beatmap(beatmap_data, tracks):
     :param tracks: List of Track objects.
     :return: List of Note objects.
     """
-    print(f"Generating notes with tracks: {tracks}")
+    #print(f"Generating notes with tracks: {tracks}")
     notes = []
     for entry in beatmap_data:
         track_idx = entry["track"]
