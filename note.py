@@ -1,11 +1,39 @@
 import pygame, track
+import heapq as hq
 
 # Constants
 NOTE_COLOR = (255, 255, 255)
 NOTE_RADIUS = 20
 NOTE_SPEED = 200  # Pixels per second
+TRACK_POSITIONS = ["LEFT", "DOWN", "UP", "RIGHT"]
+
+SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
+
+def find_closest(notes):
+    heap1 = []
+    heap2 = []
+    heap3 = []
+    heap4 = []
+    closest = {TRACK_POSITIONS[0]: heap1,
+                TRACK_POSITIONS[1]: heap2,
+                TRACK_POSITIONS[2]: heap3,
+                TRACK_POSITIONS[3]: heap4
+                }
+    for note in notes:
+        height = SCREEN_HEIGHT-note.y
+        if note.track_index == TRACK_POSITIONS[0]:
+            hq.heappush(closest[TRACK_POSITIONS[0]], height)
+        elif note.track_index == TRACK_POSITIONS[1]:
+            hq.heappush(closest[TRACK_POSITIONS[1]], height)
+        elif note.track_index == TRACK_POSITIONS[2]:
+            hq.heappush(closest[TRACK_POSITIONS[2]], height)
+        elif note.track_index == TRACK_POSITIONS[3]:
+            hq.heappush(closest[TRACK_POSITIONS[3]], height)
+        
+    return closest
 
 class Note:
+
     def __init__(self, track, time, note_speed=NOTE_SPEED):
         """
         Initialize a Note object.
@@ -65,4 +93,3 @@ def generate_notes_beatmap(beatmap_data, tracks):
 
         notes.append(Note(track=tracks[track_idx], time=time))
     return notes
-
